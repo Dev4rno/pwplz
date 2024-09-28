@@ -1,0 +1,194 @@
+/* Root variables */
+:root {
+    --bg-color: #555;
+    --main-text-color: #333;
+    --primary-color: #007bff;
+    --border-radius: 5px;
+    --font-size-large: 18px;
+    --padding: 10px;
+}
+
+/* General styling */
+body {
+    font-family: monospace;
+    margin: 0;
+    padding: 20px;
+    background-color: var(--background-color, #333); /* Default to dark mode */
+    color: var(--text-color, #fff); /* Default to white text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    transition: background-color 0.3s, color 0.3s;
+    box-sizing: border-box;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+/* Center the container */
+.container {
+    width: 100%;
+    /* max-width: 600px; */
+    margin: 0 auto;
+    text-align: center;
+    padding: 20px;
+    background-color: var(--item-background, #444); /* Dark mode background */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    min-height: 550px;
+}
+
+/* Title */
+h1 {
+    color: var(--title-color, #fff);
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+/* Password list */
+.password-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 20px;
+    border-radius: 5px;
+    background-color: var(--bg-color);
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    padding: 10px;
+    box-sizing: border-box; /* Make padding inclusive of the width */
+}
+
+/* Password label */
+.password-label {
+    font-size: 0.9rem;
+    color: #fff;
+    flex: 0.5; /* Take more space */
+    /* min-width: 0; Prevent overflow */
+    margin-right: 5px; /* Add a small margin to prevent touching */
+    /* white-space: nowrap; */
+    /* overflow: hidden; */
+    /* text-overflow: ellipsis; Show ellipsis when text overflows */
+}
+
+/* Password input box */
+.password-box {
+    padding: 5px;
+    font-family: monospace;
+    font-size: 1rem;
+    background-color: var(--bg-color);
+    flex: 3; /* Take more space */
+    color: orange;
+    /* white-space: nowrap; */
+    /* overflow: hidden; */
+    /* text-overflow: ellipsis; Show ellipsis when text overflows */
+}
+
+/* Copy button */
+.copy-button {
+    padding: 8px 4px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 3px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-family: monospace;
+    flex: 1;
+    min-width: 0; /* Prevent overflow */
+}
+
+.copy-button:hover {
+    background-color: #0069da;
+}
+
+#regenerateButton:hover {
+    background-color: rgb(182, 119, 2);
+}
+
+/* Regenerate button */
+#regenerateButton {
+    color: #fff;
+    cursor: pointer;
+    padding: 10px;
+    background-color: rgb(211, 139, 5);
+    border: none;
+    border-radius: 5px;
+    margin-top: 20px;
+    font-family: monospace;
+    width: 100%;
+    max-width: 300px;
+    margin: 20px auto;
+}
+
+/* Toast Notification */
+.toast {
+    visibility: hidden;
+    min-width: 250px;
+    font-family: monospace;
+    background-color: rgb(9, 193, 9);
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 30px;
+    font-size: 17px;
+    opacity: 0;
+    transition: opacity 0.5s, visibility 0.5s;
+}
+
+.toast.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .password-item {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+
+    .password-label,
+    .copy-button {
+        width: 100%; /* Ensure full width on smaller screens */
+        margin-bottom: 5px; /* Add spacing between elements */
+        flex: 1;
+        margin: 0;
+    }
+
+    .password-box {
+        /* margin: 0; */
+        width: 96%;
+    }
+
+    #regenerateButton {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.2rem;
+    }
+
+    .password-box {
+        font-size: 0.9rem;
+    }
+
+    .password-item {
+        width: 100%;
+    }
+}

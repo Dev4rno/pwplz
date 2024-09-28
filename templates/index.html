@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>password please</title>
+        <!-- Link to the external stylesheet -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    </head>
+    <body>
+        <div class="container">
+            <h1>Passwords</h1>
+            <div class="password-list">
+                {% for method, password in passwords.items() %}
+                <div class="password-item">
+                    <!-- Label -->
+                    <span class="password-label">{{ method }}</span>
+                    <!-- Password box -->
+                    <input
+                        type="text"
+                        id="password_{{ loop.index }}"
+                        class="password-box"
+                        value="{{ password }}"
+                        readonly
+                    />
+                    <!-- Copy button -->
+                    <button class="copy-button" onclick="copyToClipboard('password_{{ loop.index }}', '{{ method }}')">
+                        Copy
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+            <button id="regenerateButton">Regenerate</button>
+        </div>
+        <!-- Toastbar -->
+        <div id="toast" class="toast"></div>
+        <!-- Script -->
+        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    </body>
+</html>
