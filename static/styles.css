@@ -30,7 +30,7 @@ body::-webkit-scrollbar {
 /* Center the container */
 .container {
     width: 100%;
-    /* max-width: 600px; */
+    max-width: 800px;
     margin: 0 auto;
     text-align: center;
     padding: 20px;
@@ -64,11 +64,12 @@ h1 {
 
 /* Password label */
 .password-label {
-    font-size: 0.9rem;
+    font-size: 1.2rem;
+    letter-spacing: 0.1rem;
     color: #fff;
     flex: 0.5; /* Take more space */
     /* min-width: 0; Prevent overflow */
-    margin-right: 5px; /* Add a small margin to prevent touching */
+    /* margin-right: 5px; Add a small margin to prevent touching */
     /* white-space: nowrap; */
     /* overflow: hidden; */
     /* text-overflow: ellipsis; Show ellipsis when text overflows */
@@ -78,13 +79,16 @@ h1 {
 .password-box {
     padding: 5px;
     font-family: monospace;
-    font-size: 1rem;
+    font-size: 0.8rem;
     background-color: var(--bg-color);
     flex: 3; /* Take more space */
     color: orange;
-    /* white-space: nowrap; */
-    /* overflow: hidden; */
-    /* text-overflow: ellipsis; Show ellipsis when text overflows */
+    /* border: 1px solid var(--primary-color); */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-radius: 8px;
+    /* Show ellipsis when text overflows */
 }
 
 /* Copy button */
@@ -99,28 +103,29 @@ h1 {
     font-family: monospace;
     flex: 1;
     min-width: 0; /* Prevent overflow */
+    max-width: 100px;
 }
 
 .copy-button:hover {
     background-color: #0069da;
 }
 
-#regenerateButton:hover {
+#regenerate-button:hover {
     background-color: rgb(182, 119, 2);
 }
 
 /* Regenerate button */
-#regenerateButton {
+#regenerate-button {
     color: #fff;
     cursor: pointer;
-    padding: 10px;
+    padding: 12px 8px;
     background-color: rgb(211, 139, 5);
     border: none;
-    border-radius: 5px;
+    border-radius: 0.2rem;
     margin-top: 20px;
     font-family: monospace;
     width: 100%;
-    max-width: 300px;
+    max-width: 120px;
     margin: 20px auto;
 }
 
@@ -174,7 +179,7 @@ h1 {
         width: 96%;
     }
 
-    #regenerateButton {
+    #regenerate-button {
         width: 100%;
     }
 }

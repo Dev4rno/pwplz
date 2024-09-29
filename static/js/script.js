@@ -1,4 +1,4 @@
-let toastTimeout; // To store the timeout ID
+let toastTimeout;
 
 function copyToClipboard(id, method) {
     const passwordField = document.getElementById(id);
@@ -9,19 +9,14 @@ function copyToClipboard(id, method) {
 
 function showToast(method) {
     const toast = document.getElementById("toast");
-    if (toastTimeout) {
-        clearTimeout(toastTimeout);
-    }
-    // Update and show toast
+    if (toastTimeout) clearTimeout(toastTimeout);
     toast.textContent = `${method} password copied`;
     toast.classList.add("show");
-    // Hide the toast
     toastTimeout = setTimeout(() => {
         toast.classList.remove("show");
     }, 1500);
 }
 
-// Reloader
-document.getElementById("regenerateButton").addEventListener("click", () => {
+document.getElementById("regenerate-button").addEventListener("click", () => {
     location.reload();
 });

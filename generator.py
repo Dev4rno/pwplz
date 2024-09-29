@@ -3,7 +3,9 @@ from enum import Enum
 from typing import Dict
 import os, string, secrets, itertools, uuid, hashlib, bcrypt
 
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=->
 class PasswordType(Enum):
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=->
     RANDOM="random"
     ARGON2="argon2"
     DICE="dice"
@@ -11,7 +13,9 @@ class PasswordType(Enum):
     HASH="hash"
     BCRYPT="bcrypt"
 
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=->
 class PasswordGenerator:
+#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=->
 
     MIN_LENGTH = 80
     WORD_FILE = "words.txt"
