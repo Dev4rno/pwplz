@@ -7,7 +7,7 @@ app = Flask(__name__)
 generator = PasswordGenerator()
 
 # Default route
-@app.route('/')
+@app.route('/', methods=["GET"])
 def home():
     """Generate passwords and render them in a simple HTML page."""
     passwords = generator._generate_all_passwords()
