@@ -5,6 +5,10 @@ import re
 from argon2 import PasswordHasher
 
 @pytest.fixture
+def minimum_length():
+    return 80
+
+@pytest.fixture
 def password_generator():
     return PasswordGenerator()
 
@@ -14,7 +18,7 @@ def mock_word_file():
         yield
 
 def test_create_random_password_length(password_generator):
-    length = 80
+    length = password_generator.MIN_LENGTH
     password = password_generator._create_random_password(length)
     assert len(password) == length
 
@@ -39,20 +43,18 @@ def test_bcrypt_based(password_generator):
     assert bcrypt_password.startswith('$2b$')
 
 def test_argon2_based(password_generator):
-    length = 80
+    length = password_generator.MIN_LENGTH
     argon2_password = password_generator.argon2_based(length)
-    assert len(argon2_password) >= 80
     assert argon2_password.startswith('$argon2')
+    assert len(argon2_password) >= length
 
 def test_diceware_based_length(password_generator):
-    length = 80
-    diceware_password = password_generator.diceware_based(length)
+    diceware_password = password_generator.diceware_based(password_generator.MIN_LENGTH)
     words = diceware_password.split('-')
     assert all(word in ["word1", "word2", "word3"] for word in words)
 
 def test_diceware_based_words(password_generator):
-    length = 80
-    diceware_password = password_generator.diceware_based(length)
+    diceware_password = password_generator.diceware_based(password_generator.MIN_LENGTH)
     words = diceware_password.split('-')
     assert all(word in ["word1", "word2", "word3"] for word in words)
 
