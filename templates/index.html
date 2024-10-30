@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>password please</title>
+        <title>🙏 password, please!</title>
         <!-- Link to the external stylesheet -->
         <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet" />
     </head>
@@ -35,6 +35,6 @@
         <!-- Toastbar -->
         <div id="toast" class="toast"></div>
         <!-- Script -->
-        <script src="/static/js/script.js"></script>
+        <script src="{{ url_for('static', path='/script.js') }}"></script>
     </body>
 </html>
