@@ -13,7 +13,7 @@ generator = PasswordGenerator()
 # Default
 @app.get("/", response_class=HTMLResponse)
 
-async def home(request: Request):
+async def root(request: Request):
     """Generate passwords and render them in a simple HTML page."""
     passwords = generator._generate_all_passwords()
     return templates.TemplateResponse(request=request, name="index.html", context={"passwords": passwords})
