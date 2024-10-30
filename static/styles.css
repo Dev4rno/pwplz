@@ -37,7 +37,8 @@ body::-webkit-scrollbar {
     background-color: var(--item-background, #444); /* Dark mode background */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    min-height: 550px;
+    height: fit-content;
+    /* min-height: 550px; */
 }
 
 /* Title */
@@ -73,6 +74,25 @@ h1 {
     /* white-space: nowrap; */
     /* overflow: hidden; */
     /* text-overflow: ellipsis; Show ellipsis when text overflows */
+}
+
+.error-container {
+    text-align: center;
+    border: 1px solid #dee2e6;
+    padding: 30px;
+    max-width: 600px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+.status-code {
+    font-size: 3em;
+    font-weight: bold;
+    color: #dc3545;
+}
+.error-message {
+    font-size: 1.5em;
+    margin: 15px 0;
 }
 
 /* Password input box */

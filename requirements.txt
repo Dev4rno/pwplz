@@ -4,3 +4,4 @@ jinja2
 argon2-cffi
 bcrypt
 pytest
+httpx
