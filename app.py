@@ -17,3 +17,7 @@ async def home(request: Request):
     """Generate passwords and render them in a simple HTML page."""
     passwords = generator._generate_all_passwords()
     return templates.TemplateResponse(request=request, name="index.html", context={"passwords": passwords})
+
+# if __name__ == "__main__":
+#     port = int(os.getenv("PORT", 8000))
+#     uvicorn.run(app, host="0.0.0.0", port=port)
