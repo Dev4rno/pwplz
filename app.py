@@ -1,18 +1,25 @@
-import os 
-from flask import Flask, render_template
+import os
+from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 from generator import PasswordGenerator
+from starlette.requests import Request
 
-# Initialise
-app = Flask(__name__)
+# Init
+app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 generator = PasswordGenerator()
 
-# Default route
-@app.route('/', methods=["GET"])
-def home():
+# Default
+@app.get("/", response_class=HTMLResponse)
+async def home(request: Request):
     """Generate passwords and render them in a simple HTML page."""
     passwords = generator._generate_all_passwords()
-    return render_template('index.html', passwords=passwords)
+    return templates.TemplateResponse("index.html", {"request": request, "passwords": passwords})
 
 # Default script
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=os.getenv("PORT", default=5000))
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=int(os.getenv("PORT", 5000)))

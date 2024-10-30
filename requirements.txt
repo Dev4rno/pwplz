@@ -1,5 +1,0 @@
-Flask==3.0.3
-gunicorn
-argon2-cffi
-bcrypt
-pytest

@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>password please</title>
         <!-- Link to the external stylesheet -->
-        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+        <link rel="stylesheet" href="{{ url_for('static', path='styles.css') }}" />
     </head>
     <body>
         <div class="container">
@@ -35,6 +35,6 @@
         <!-- Toastbar -->
         <div id="toast" class="toast"></div>
         <!-- Script -->
-        <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+        <script src="{{ url_for('static', path='js/script.js') }}"></script>
     </body>
 </html>

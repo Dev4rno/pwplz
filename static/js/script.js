@@ -15,6 +15,7 @@ function showToast(method) {
     toastTimeout = setTimeout(() => {
         toast.classList.remove("show");
     }, 1500);
+    () => clearTimeout(toastTimeout);
 }
 
 document.getElementById("regenerate-button").addEventListener("click", () => {
