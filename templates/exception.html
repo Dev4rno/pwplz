@@ -4,48 +4,19 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Error {{ status_code }}</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                background-color: var(--background-color, #333); /* Default to dark mode */
-                color: #333;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 100vh;
-                margin: 0;
-            }
-            .error-box {
-                text-align: center;
-                padding: 3em;
-                max-width: 600px;
-                border-radius: 8px;
-                background-color: #444;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            }
-            .status-code {
-                font-size: 3em;
-                font-weight: bold;
-                color: #dc3545;
-            }
-            .error-message {
-                font-size: 1.5em;
-                margin: 15px 0;
-                color: #fff;
-            }
-            .detail {
-                color: salmon;
-                font-size: 1em;
-                margin-top: 20px;
-                text-transform: lowercase;
-            }
-        </style>
+        <link rel="icon" href="{{ url_for('static', path='/favicon.png') }}" type="image/pmg" />
+        <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet" />
     </head>
     <body>
-        <div class="error-box">
+        <div class="error-container">
             <div class="status-code">Whoops</div>
             <div class="error-message">Something went wrong</div>
-            <div class="detail">{{ detail }}</div>
+            <div class="error-detail">{{ detail }}</div>
+            <div style="margin-top: 2rem">
+                <a href="/" style="text-decoration: none">
+                    <h3 style="color: var(--primary-color-2); font-weight: 300">⬅️ Back to passwords</h3>
+                </a>
+            </div>
         </div>
     </body>
 </html>

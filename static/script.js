@@ -1,12 +1,22 @@
 let toastTimeout;
 
+// Clipboard handler
 function copyToClipboard(id, method) {
     const passwordField = document.getElementById(id);
     passwordField.select();
-    document.execCommand("copy");
-    showToast(method);
+
+    // Use the newer Clipboard API for better compatibility
+    navigator.clipboard
+        .writeText(passwordField.value)
+        .then(() => {
+            showToast(method);
+        })
+        .catch((err) => {
+            console.error("Failed to copy: ", err);
+        });
 }
 
+// Toast handler
 function showToast(method) {
     const toast = document.getElementById("toast");
     if (toastTimeout) clearTimeout(toastTimeout);
@@ -15,9 +25,14 @@ function showToast(method) {
     toastTimeout = setTimeout(() => {
         toast.classList.remove("show");
     }, 1500);
-    () => clearTimeout(toastTimeout);
 }
 
-document.getElementById("regenerate-button").addEventListener("click", () => {
-    location.reload();
-});
+// Regenerate button handler
+const regenerateButton = document.getElementById("regenerate-button");
+if (regenerateButton) {
+    regenerateButton.addEventListener("click", () => {
+        location.reload();
+    });
+} else {
+    console.error("Regenerate button not found");
+}

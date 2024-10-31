@@ -3,6 +3,7 @@
     --bg-color: #555;
     --main-text-color: #333;
     --primary-color: #007bff;
+    --primary-color-2: #5dabff;
     --border-radius: 5px;
     --font-size-large: 18px;
     --padding: 10px;
@@ -11,14 +12,13 @@
 /* General styling */
 body {
     font-family: monospace;
-    margin: 0;
-    padding: 20px;
+    padding: 2rem;
     background-color: var(--background-color, #333); /* Default to dark mode */
     color: var(--text-color, #fff); /* Default to white text */
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    height: fit-content;
     transition: background-color 0.3s, color 0.3s;
     box-sizing: border-box;
 }
@@ -30,10 +30,8 @@ body::-webkit-scrollbar {
 /* Center the container */
 .container {
     width: 100%;
-    max-width: 800px;
-    margin: 0 auto;
     text-align: center;
-    padding: 20px;
+    padding: 1rem 2rem;
     background-color: var(--item-background, #444); /* Dark mode background */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -65,26 +63,21 @@ h1 {
 
 /* Password label */
 .password-label {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     letter-spacing: 0.1rem;
     color: #fff;
-    flex: 0.5; /* Take more space */
-    /* min-width: 0; Prevent overflow */
-    /* margin-right: 5px; Add a small margin to prevent touching */
-    /* white-space: nowrap; */
-    /* overflow: hidden; */
-    /* text-overflow: ellipsis; Show ellipsis when text overflows */
+    flex: 0.5;
 }
 
 .error-container {
     text-align: center;
-    border: 1px solid #dee2e6;
-    padding: 30px;
-    max-width: 600px;
+    padding: 3em;
+    max-width: 650px;
     border-radius: 8px;
-    background-color: #fff;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #444;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
 .status-code {
     font-size: 3em;
     font-weight: bold;
@@ -93,16 +86,23 @@ h1 {
 .error-message {
     font-size: 1.5em;
     margin: 15px 0;
+    color: salmon;
+}
+.error-detail {
+    color: #fff;
+    font-size: 1em;
+    margin-top: 20px;
+    text-transform: lowercase;
 }
 
 /* Password input box */
 .password-box {
-    padding: 5px;
+    padding: 8px;
     font-family: monospace;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     background-color: var(--bg-color);
     flex: 3; /* Take more space */
-    color: orange;
+    color: rgb(249, 174, 35);
     /* border: 1px solid var(--primary-color); */
     white-space: nowrap;
     overflow: hidden;
@@ -113,7 +113,7 @@ h1 {
 
 /* Copy button */
 .copy-button {
-    padding: 8px 4px;
+    padding: 8px;
     background-color: var(--primary-color);
     color: white;
     border: none;
@@ -123,7 +123,7 @@ h1 {
     font-family: monospace;
     flex: 1;
     min-width: 0; /* Prevent overflow */
-    max-width: 100px;
+    max-width: 80px;
 }
 
 .copy-button:hover {
@@ -138,14 +138,15 @@ h1 {
 #regenerate-button {
     color: #fff;
     cursor: pointer;
-    padding: 12px 8px;
+    padding: 12px 20px;
     background-color: rgb(211, 139, 5);
     border: none;
-    border-radius: 0.2rem;
+    border-radius: 1rem;
     margin-top: 20px;
+    font-size: 1rem;
     font-family: monospace;
+    max-width: 200px;
     width: 100%;
-    max-width: 120px;
     margin: 20px auto;
 }
 
@@ -176,18 +177,24 @@ h1 {
 
 /* Media queries for responsiveness */
 @media (max-width: 768px) {
+    body {
+        padding: 1rem;
+    }
+
     .container {
-        padding: 10px;
+        padding: 1rem;
     }
 
     .password-item {
         flex-direction: column;
         width: 100%;
-        gap: 10px;
+        margin-bottom: 16px;
+        padding: 1rem;
     }
 
     .password-label,
     .copy-button {
+        max-width: 100%;
         width: 100%; /* Ensure full width on smaller screens */
         margin-bottom: 5px; /* Add spacing between elements */
         flex: 1;
@@ -195,7 +202,6 @@ h1 {
     }
 
     .password-box {
-        /* margin: 0; */
         width: 96%;
     }
 

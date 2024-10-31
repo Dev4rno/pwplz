@@ -1,5 +1,6 @@
 from argon2 import PasswordHasher
 from enum import Enum
+import random
 from typing import Dict, List
 import string, secrets, itertools, uuid, hashlib, bcrypt
 
@@ -12,6 +13,9 @@ class PasswordType(Enum):
     UUID="uuid"
     HASH="hash"
     BCRYPT="bcrypt"
+
+def get_random_password_type():
+    return random.choice(list(PasswordType)).value
 
 ########################>
 class PasswordGenerator:
