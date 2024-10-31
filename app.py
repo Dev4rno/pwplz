@@ -10,7 +10,6 @@ from generator import PasswordGenerator, PasswordType, get_random_password_type
 load_dotenv()
 MIN_LENGTH = int(os.getenv("MIN_LENGTH"))
 DICEWARE_WORDS = os.getenv("DICEWARE_WORDS")
-BASE_URL = os.getenv("BASE_URL")
 
 # Init
 app = FastAPI()
