@@ -22,7 +22,7 @@ class PasswordGenerator:
     def __init__(self, min_length: int, words: str):
         self.min_length = min_length
         self.words = words
-        self._charsets = [
+        self.charsets = [
             string.ascii_lowercase,
             string.ascii_uppercase,
             string.digits,
@@ -33,8 +33,8 @@ class PasswordGenerator:
 
     def _create_random_password(self) -> str:
         """Generate a password using random sampling"""
-        password_chars = [secrets.choice(x) for x in self._charsets]
-        permitted_chars = ''.join(itertools.chain(*self._charsets))
+        password_chars = [secrets.choice(x) for x in self.charsets]
+        permitted_chars = ''.join(itertools.chain(*self.charsets))
         password_chars += [secrets.choice(permitted_chars) for _ in range(self.min_length - len(password_chars))]
         secrets.SystemRandom().shuffle(password_chars) # Shuffle the list to avoid predictable patterns
         password = ''.join(password_chars) # Convert list to string and return
@@ -77,6 +77,8 @@ class PasswordGenerator:
         """Generate a passphrase using the Diceware method"""
         password = ""
         wordlist = self._get_random_words()
+        if not wordlist:
+            return ""
         while len(password) < self.min_length:
             password += secrets.choice(wordlist) + '-'
         return password.rstrip('-')
