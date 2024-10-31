@@ -90,7 +90,6 @@ def test_minimum_length_of_one():
 def test_diceware_with_empty_words():
     generator = PasswordGenerator(10, "")
     diceware_password = generator._create_diceware_password()
-    print("DOCEWAREAFEWKMFAL:F", diceware_password)
     assert diceware_password == ""
 
 #-=-=-=-=-=-=-=-=-=->
