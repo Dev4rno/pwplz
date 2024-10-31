@@ -8,7 +8,9 @@ jobs:
         strategy:
             matrix:
                 python-version: ["3.10"]
-
+        env:
+            DICEWARE_WORDS: ${{ secrets.DICEWARE_WORDS }}
+            MIN_LENGTH: ${{ secrets.MIN_LENGTH }}
         steps:
             - uses: actions/checkout@v3
             - name: Set up Python ${{ matrix.python-version }}
