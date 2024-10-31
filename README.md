@@ -48,6 +48,7 @@ The application consists of the following key components:
 
 ## Architecture
 
+```mermaid
 graph TD;
 A[User] -->|makes request| B[FastAPI App]
 B --> C[Generator]
@@ -73,6 +74,7 @@ I -->|configures| J[Settings]
         I
         J
     end
+```
 
 ## Installation
 
