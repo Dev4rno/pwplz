@@ -4,7 +4,7 @@ from fastapi import FastAPI, Request, HTTPException, status
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from generator import PasswordGenerator, PasswordType, get_random_password_type
+from generator import PasswordGenerator, PasswordType
 
 # Env
 load_dotenv()
@@ -20,12 +20,13 @@ generator = PasswordGenerator(MIN_LENGTH, DICEWARE_WORDS)
 # Exception handlers
 @app.exception_handler(HTTPException)
 async def validation_exception_handler(request: Request, exc):
+    blocks = str(exc).split(": ")
     return templates.TemplateResponse(
         request=request,
         name="exception.html",
         context={
             "status_code": status.HTTP_400_BAD_REQUEST,
-            "detail": str(exc).replace(": ", " • "),
+            "detail": blocks[1],
         }
     )
 
@@ -41,7 +42,7 @@ async def render_all_passwords(request: Request):
         name="all_passwords.html",
         context={
             "passwords": generator._generate_all_passwords(),
-            "type": get_random_password_type(),
+            "random_method": generator._get_random_password_type(),
         }
     )
 
@@ -53,13 +54,19 @@ async def render_all_passwords(request: Request):
 async def render_single_password(request: Request, method: str):
     """Endpoint to render a simple HTML page with a single generated password"""
     try:
-        if not method == PasswordType.ARGON2.value:
-            if not method.isalpha():
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=f"Invalid password type: expected letters only",
-                )        
-        creator = generator._get_password_creation_method(method)
+        # Special handling for "argon2"
+        if method.lower() == "argon2":
+            password_type = PasswordType.ARGON2
+        # For all other cases, ensure method is alphabetic before converting to enum
+        elif method.isalpha():
+            password_type = PasswordType[method.upper()]
+        else:
+            raise ValueError  # Trigger HTTPException below if invalid
+
+        # Retrieve the creation method function from the generator
+        creator = generator._get_password_creation_method(password_type)
+        
+        # Return the template with the generated password
         return templates.TemplateResponse(
             request=request,
             name="single_password.html",
@@ -68,7 +75,7 @@ async def render_single_password(request: Request, method: str):
                 "password": creator(),
             }
         )
-    except ValueError:
+    except (KeyError, ValueError):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Invalid password type: {method}",

@@ -57,7 +57,7 @@ def test_all_passwords(generator):
     passwords = generator._generate_all_passwords()
     assert PasswordType.RANDOM.value in passwords
     assert PasswordType.ARGON2.value in passwords
-    assert PasswordType.DICE.value in passwords
+    assert PasswordType.DICEWARE.value in passwords
     assert PasswordType.UUID.value in passwords
     assert PasswordType.HASH.value in passwords
     assert PasswordType.BCRYPT.value in passwords
