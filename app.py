@@ -1,4 +1,5 @@
 import os
+from typing import Union
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request, HTTPException, status
 from fastapi.responses import HTMLResponse
@@ -15,10 +16,13 @@ DICEWARE_WORDS = os.getenv("DICEWARE_WORDS")
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
-generator = PasswordGenerator(MIN_LENGTH, DICEWARE_WORDS)
+generator = PasswordGenerator(min_length=MIN_LENGTH, words=DICEWARE_WORDS)
 
-# Exception handlers
+#-=-=-=-=-=-=-=-=-=-=-=-=>
+# Exception wrapper
 @app.exception_handler(HTTPException)
+#-=-=-=-=-=-=-=-=-=-=-=-=>
+
 async def validation_exception_handler(request: Request, exc):
     blocks = str(exc).split(": ")
     return templates.TemplateResponse(
@@ -30,40 +34,39 @@ async def validation_exception_handler(request: Request, exc):
         }
     )
 
-##########################################>
+#-=-=-=-=-=-=-=-=-=-=-=-=>
 # Default route
 @app.get("/", response_class=HTMLResponse)
-##########################################>
+#-=-=-=-=-=-=-=-=-=-=-=-=>
 
 async def render_all_passwords(request: Request):
     """Endpoint to render a simple HTML page with all generated passwords"""
-    return templates.TemplateResponse(
-        request=request,
-        name="all_passwords.html",
-        context={
-            "passwords": generator._generate_all_passwords(),
-            "random_method": generator._get_random_password_type(),
-        }
-    )
-
-##########################################>
+    try:        
+        return templates.TemplateResponse(
+            request=request,
+            name="all_passwords.html",
+            context={
+                "passwords": generator._generate_all_passwords(),
+                "random_method": generator._get_random_password_type(),
+            }
+        )
+    except KeyError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Invalid password type: ",
+        )
+#-=-=-=-=-=-=-=-=-=-=-=-=>
 # Method-specific route
-@app.get("/{method}", response_class=HTMLResponse)
-##########################################>
+@app.get("/{slug}", response_class=HTMLResponse)
+#-=-=-=-=-=-=-=-=-=-=-=-=>
 
-async def render_single_password(request: Request, method: str):
+async def render_single_password(request: Request, slug: str):
     """Endpoint to render a simple HTML page with a single generated password"""
     try:
-        # Special handling for "argon2"
-        if method.lower() == "argon2":
-            password_type = PasswordType.ARGON2
-        # For all other cases, ensure method is alphabetic before converting to enum
-        elif method.isalpha():
-            password_type = PasswordType[method.upper()]
-        else:
-            raise ValueError  # Trigger HTTPException below if invalid
-
-        # Retrieve the creation method function from the generator
+        # Validate slug in PasswordType 
+        password_type = PasswordType[slug.upper()]
+        
+        # Map slug to password creation method 
         creator = generator._get_password_creation_method(password_type)
         
         # Return the template with the generated password
@@ -71,12 +74,12 @@ async def render_single_password(request: Request, method: str):
             request=request,
             name="single_password.html",
             context={
-                "method": method,
+                "slug": slug,
                 "password": creator(),
-            }
+            },
         )
-    except (KeyError, ValueError):
+    except KeyError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Invalid password type: {method}",
+            detail=f"Invalid password type: {slug}",
         )

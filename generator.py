@@ -19,9 +19,11 @@ class PasswordType(Enum):
 class PasswordGenerator:
 ########################>
     
-    def __init__(self, min_length: int, words: str):
-        self.min_length = min_length
-        self.words = words
+    def __init__(self, **kwargs):
+        if not all([x in ("min_length", "words") for x in kwargs]):
+            raise ValueError("Invalid PasswordGenerator initialisation")
+        self.min_length = kwargs["min_length"]
+        self.words = kwargs["words"]
         self.charsets = [
             string.ascii_lowercase,
             string.ascii_uppercase,
@@ -33,31 +35,31 @@ class PasswordGenerator:
 
     def _create_random_password(self) -> str:
         """Generate a password using random sampling"""
-        password_chars = [secrets.choice(x) for x in self.charsets]
+        password_chars = [secrets.choice(charset) for charset in self.charsets]
         permitted_chars = ''.join(itertools.chain(*self.charsets))
         password_chars += [secrets.choice(permitted_chars) for _ in range(self.min_length - len(password_chars))]
-        secrets.SystemRandom().shuffle(password_chars) # Shuffle the list to avoid predictable patterns
-        password = ''.join(password_chars) # Convert list to string and return
+        secrets.SystemRandom().shuffle(password_chars) 
+        password = ''.join(password_chars) 
         return password
 
     #-=-=-=-=-=-=-=-=-=->
 
     def _create_uuid_password(self) -> uuid.UUID:
-        """Generate a password based on UUID"""
+        """Generate a Universally Unique Identifier password"""
         return str(uuid.uuid4())
 
     #-=-=-=-=-=-=-=-=-=->
 
     def _create_hash_password(self) -> str:
         """Generate a password using a hash function"""
-        random_string = secrets.token_bytes(16)  # Generate a random byte string
-        hash_digest = hashlib.sha256(random_string).hexdigest()  # Hash the byte string
+        random_string = secrets.token_bytes(16) # Random byte string
+        hash_digest = hashlib.sha256(random_string).hexdigest()  # Hash byte string
         return hash_digest
 
     #-=-=-=-=-=-=-=-=-=->
 
     def _create_bcrypt_password(self) -> str:
-        """Generate a password using bcrypt for hashing"""
+        """Generate a bcrypt salted / hashed password"""
         salt = bcrypt.gensalt()
         password = bcrypt.hashpw(secrets.token_bytes(16), salt)
         password = password.decode("utf-8", "ignore")
@@ -67,14 +69,14 @@ class PasswordGenerator:
 
     def _create_argon2_password(self) -> str:
         """Generate a password using Argon2"""
-        ph = PasswordHasher()
-        password = ph.hash(secrets.token_hex(32))
+        hasher = PasswordHasher()
+        password = hasher.hash(secrets.token_hex(32))
         return password[:self.min_length] 
 
     #-=-=-=-=-=-=-=-=-=->
 
     def _create_diceware_password(self) -> str:
-        """Generate a passphrase using the Diceware method"""
+        """Generate a Diceware-based password"""
         password = ""
         wordlist = self._get_random_words()
         if not wordlist:

@@ -4,20 +4,6 @@
 
 _Password Please_ (`pwplz`) is a simple web application that generates and manages passwords using [FastAPI](https://fastapi.tiangolo.com/tutorial/). With a user-friendly interface, users can generate, view, and copy passwords easily.
 
-### Motivation
-
-I wanted to create a project that showcases the beauty of Python, and FastAPI makes it easier than ever to do just that. Like Flask, it lets you tweak response types, which means you can whip up a simple HTML frontend that works perfectly with a lightning-fast backend. This application demonstrates the power and flexibility of FastAPI in building web applications quickly and efficiently.
-
-### FastAPI
-
-[FastAPI](<(https://fastapi.tiangolo.com/tutorial/)>) is a modern, high-performance web framework for building APIs with Python 3.6+ based on standard Python type hints. FastAPI is designed to be fast and efficient, making it suitable for building both simple and complex applications. It provides the following key features:
-
--   **Fast**: Very high performance, on par with NodeJS and Go, thanks to Starlette and Pydantic.
--   **Easy**: Designed to be easy to use and learn, with intuitive code and automatic generation of documentation.
--   **Built-in Validation**: Automatically validates request data against defined models.
--   **Interactive Documentation**: Automatically generated API docs (Swagger UI and ReDoc).
--   **Asynchronous Support**: Full support for async and await, allowing for high concurrency.
-
 ## Application Logic
 
 ### Features
@@ -25,8 +11,8 @@ I wanted to create a project that showcases the beauty of Python, and FastAPI ma
 `pwplz` offers the following features:
 
 Password Generation: Automatically generates a set of passwords using defined rules.
-User Interface: A simple web interface that displays generated passwords along with options to copy them to the clipboard.
-Dynamic Password Regeneration: Users can regenerate passwords dynamically without refreshing the page.
+Simple Interface: A simple web interface that displays generated passwords along with options to copy them to the clipboard.
+Easy Regeneration: Users can regenerate passwords dynamically without refreshing the page.
 
 ## Application Structure
 
@@ -115,6 +101,10 @@ Open a web browser (Chrome, Safari, Firefox etc.) and navigate to http://localho
 ## Hosting
 
 This app is hosted on [Vercel](https://vercel.com/), with a dedicated Vercel domain ([pwplz.vercel.app](https://pwplz.vercel.app)) pointing to a custom domain ([pwplz.com](https://pwplz.com)), but can also be deployed and hosted on any FastAPI-compatible cloud service, such as [Render](https://render.com/) or [Railway](https://railway.app/).
+
+### Motivation
+
+I wanted to dive into a project that showcases just how awesome Python is, and FastAPI makes it super approachable. Like Flask, Django, and Tornado, it lets you effortlessly switch up response types. You can easily craft a sleek HTML frontend that syncs seamlessly with an ultra-responsive backend, empowering developers to deliver features at lightning-fast speeds.
 
 ## Contributing
 

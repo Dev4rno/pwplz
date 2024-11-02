@@ -13,8 +13,6 @@ STYLES = 'link href="http://testserver/static/styles.css" rel="stylesheet"'
 SCRIPT = 'script src="http://testserver/static/script.js"'
 REGEN_BUTTON = 'button id="regenerate-button"'
 
-def single_password_template_title(password_type: str):
-    return f'<h1>🔐 Your <span style="color: orange">{password_type}</span> password</h1>'
 
 # Mock data
 mock_password_map = {
@@ -78,6 +76,9 @@ def test_render_all_passwords(_):
     assert REGEN_BUTTON in html_content
     assert SCRIPT in html_content
     assert STYLES in html_content
+
+def single_password_template_title(password_type: str):
+    return f'<h1>🔐 Your <span style="color: orange">{password_type}</span> password</h1>'
 
 # HASH
 @patch("app.generator._create_hash_password", side_effect=mock_create_hash_password)
