@@ -8,7 +8,7 @@ from html import escape
 client = TestClient(app)
 
 # Const
-TITLE = "<title>Password, please!</title>"
+TITLE = "<title>password, please!</title>"
 STYLES = 'link href="http://testserver/static/styles.css" rel="stylesheet"'
 SCRIPT = 'script src="http://testserver/static/script.js"'
 REGEN_BUTTON = 'button id="regenerate-button"'
@@ -54,7 +54,7 @@ def test_render_all_passwords(_):
     # Hit default route and extract response
     response = client.get("/")
     html_content = response.text
-
+    
     # Assert expected properties
     assert response.status_code == 200
     assert TITLE in html_content

@@ -34,33 +34,7 @@ The application consists of the following key components:
 
 ## Architecture
 
-```mermaid
-graph TD;
-A[User] -->|makes request| B[FastAPI App]
-B --> C[Generator]
-C -->|creates| D[Passwords]
-D -->|returns| E[HTML Response]
-B -->|renders| F[Templates]
-F -->|displays| E
-B -->|handles| G[Error Handling]
-G -->|raises| H[HTTPException]
-B -->|uses| I[Environment Variables]
-I -->|configures| J[Settings]
-
-    subgraph Frontend
-        F
-        E
-    end
-
-    subgraph Backend
-        B
-        C
-        D
-        G
-        I
-        J
-    end
-```
+![pwplz Block Diagram](static/pwplz-block-diagram.png)
 
 ## Installation
 
@@ -104,7 +78,7 @@ This app is hosted on [Vercel](https://vercel.com/), with a dedicated Vercel dom
 
 ### Motivation
 
-I wanted to dive into a project that showcases just how awesome Python is, and FastAPI makes it super approachable. Like Flask, Django, and Tornado, it lets you effortlessly switch up response types. You can easily craft a sleek HTML frontend that syncs seamlessly with an ultra-responsive backend, empowering developers to deliver features at lightning-fast speeds.
+I was eager to craft a project that highlights just how amazing Python can be, and FastAPI's approachable nature made it all come together effortlessly. Within minutes, you can easily craft a sleek HTML frontend that syncs seamlessly with an ultra-responsive backend.
 
 ## Contributing
 

@@ -6,6 +6,7 @@ from generator import PasswordGenerator, PasswordType
 import re
 
 load_dotenv()
+
 #-=-=-=-=-=-=-=-=-=->
 
 WORDS = os.getenv("DICEWARE_WORDS")

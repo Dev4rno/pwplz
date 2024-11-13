@@ -9,14 +9,15 @@ from generator import PasswordGenerator, PasswordType
 
 # Env
 load_dotenv()
+
 MIN_LENGTH = int(os.getenv("MIN_LENGTH"))
 DICEWARE_WORDS = os.getenv("DICEWARE_WORDS")
+generator = PasswordGenerator(min_length=MIN_LENGTH, words=DICEWARE_WORDS)
 
 # Init
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
-generator = PasswordGenerator(min_length=MIN_LENGTH, words=DICEWARE_WORDS)
 
 #-=-=-=-=-=-=-=-=-=-=-=-=>
 # Exception wrapper
@@ -50,11 +51,12 @@ async def render_all_passwords(request: Request):
                 "random_method": generator._get_random_password_type(),
             }
         )
-    except KeyError:
+    except Exception:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Invalid password type: ",
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Something went wrong, try again later",
         )
+        
 #-=-=-=-=-=-=-=-=-=-=-=-=>
 # Method-specific route
 @app.get("/{slug}", response_class=HTMLResponse)

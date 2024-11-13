@@ -14,7 +14,6 @@ class PasswordType(Enum):
     HASH="hash"
     BCRYPT="bcrypt"
 
-
 ########################>
 class PasswordGenerator:
 ########################>
@@ -37,7 +36,9 @@ class PasswordGenerator:
         """Generate a password using random sampling"""
         password_chars = [secrets.choice(charset) for charset in self.charsets]
         permitted_chars = ''.join(itertools.chain(*self.charsets))
-        password_chars += [secrets.choice(permitted_chars) for _ in range(self.min_length - len(password_chars))]
+        chars_left = self.min_length - len(password_chars)
+        for _ in range(chars_left):        
+            password_chars += [secrets.choice(permitted_chars)]
         secrets.SystemRandom().shuffle(password_chars) 
         password = ''.join(password_chars) 
         return password
@@ -60,9 +61,12 @@ class PasswordGenerator:
 
     def _create_bcrypt_password(self) -> str:
         """Generate a bcrypt salted / hashed password"""
-        salt = bcrypt.gensalt()
+        # Generate random salt
+        salt = bcrypt.gensalt() 
+        # Hash 16 random bytes with salt
         password = bcrypt.hashpw(secrets.token_bytes(16), salt)
-        password = password.decode("utf-8", "ignore")
+        # Decode the password from bytes to a UTF-8 string, ignoring any errors
+        password = password.decode("utf-8", "ignore")       
         return password
 
     #-=-=-=-=-=-=-=-=-=->
