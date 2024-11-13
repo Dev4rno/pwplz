@@ -6,4 +6,3 @@ bcrypt
 pytest
 httpx
 apitally[fastapi]
-fastapi-analytics
