@@ -73,12 +73,13 @@ These can (and should) be configured separately within a .env file, like so:
 
 ```bash
 # .env
-
 MIN_LENGTH=50
-DICEWARE_WORDS=kiwi-apple-orange-banana-watermelon #etc
+DICEWARE_WORDS=kiwi-apple-orange-banana-watermelon
 ```
 
-`pwplz` integrates analytics through [Apitally.io](https://apitally.io/), with the integration configured via the ApitallyMiddleware in FastAPI. The APITALLY_ID is securely stored in the .env file, allowing each developer to use their own account or remove the middleware entirely for customised setup.
+`pwplz` integrates analytics through [Apitally.io](https://apitally.io/), with the integration configured via the `ApitallyMiddleware` in FastAPI. The `APITALLY_ID` is securely stored in the `.env` file, allowing each developer to use their own account or remove the middleware entirely for customised setup.
+
+An example `.env` file configuration is demonstrated within `.env.example`.
 
 ### Run the Application
 
