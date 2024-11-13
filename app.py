@@ -6,10 +6,12 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from generator import PasswordGenerator, PasswordType
+from apitally.fastapi import ApitallyMiddleware
 
 # Env
 load_dotenv()
 
+APITALLY_ID = os.getenv("APITALLY_ID")
 MIN_LENGTH = int(os.getenv("MIN_LENGTH"))
 DICEWARE_WORDS = os.getenv("DICEWARE_WORDS")
 generator = PasswordGenerator(min_length=MIN_LENGTH, words=DICEWARE_WORDS)
@@ -19,6 +21,14 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
+#-=-=-=-=-=-=-=-=-=-=-=-=>
+# Analytics via https://apitally.io/
+app.add_middleware(
+#-=-=-=-=-=-=-=-=-=-=-=-=>
+    ApitallyMiddleware,
+    client_id=APITALLY_ID,
+    env="prod",
+)
 #-=-=-=-=-=-=-=-=-=-=-=-=>
 # Exception wrapper
 @app.exception_handler(HTTPException)
