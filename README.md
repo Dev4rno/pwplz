@@ -82,14 +82,10 @@ I was eager to craft a project that highlights just how amazing Python can be, a
 
 ## Contributing
 
-Contributions are welcome! If you have suggestions for improvements or want to add new features, please fork the repository and create a pull request.
+Contributions to `pwplz` are most welcome, and I'm excited to see this project grow with your ideas and improvements. Please take a moment to review the [CONTRIBUTING](./CONTRIBUTING.md) file before you start. It outlines the steps to get involved, including how to fork the repository, create branches, test, and submit pull requests.
 
--   Fork the repository.
--   Create your feature branch (`git checkout -b feature/AmazingFeature`).
--   Commit your changes (`git commit -m 'Add some amazing feature'`).
--   Push to the branch (`git push origin feature/AmazingFeature`).
--   Open a pull request.
+We also believe in fostering a positive, inclusive community. Our [CODE_OF_CONDUCT](./CODE_OF_CONDUCT.md) sets expectations for respectful interactions and outlines steps to report unacceptable behavior. By contributing to this project, you agree to abide by this code.
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
