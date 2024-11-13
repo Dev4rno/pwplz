@@ -32,9 +32,9 @@ def mock_generate_passwords():
     return mock_password_map
 
 # Single password test helper
-def run_password_test(endpoint: str, password_type: str, mock_func):
+def run_password_test(password_type: str, mock_func):
     with patch(f"app.generator._create_{password_type}_password", side_effect=mock_func):
-        response = client.get(f"/{endpoint}")
+        response = client.get(f"/{password_type}")
         html_content = response.text
         assert response.status_code == 200
         assert TITLE in html_content
@@ -47,27 +47,27 @@ def run_password_test(endpoint: str, password_type: str, mock_func):
 
 # Hash password test
 def test_render_hash_password():
-    run_password_test("hash", "hash", lambda: mock_password_map["hash"])
+    run_password_test("hash", lambda: mock_password_map["hash"])
 
 # Argon2 password test
 def test_render_argon2_password():
-    run_password_test("argon2", "argon2", lambda: mock_password_map["argon2"])
+    run_password_test("argon2", lambda: mock_password_map["argon2"])
 
 # Bcrypt password test
 def test_render_bcrypt_password():
-    run_password_test("bcrypt", "bcrypt", lambda: mock_password_map["bcrypt"])
+    run_password_test("bcrypt", lambda: mock_password_map["bcrypt"])
 
 # Random password test
 def test_render_random_password():
-    run_password_test("random", "random", lambda: mock_password_map["random"])
+    run_password_test("random", lambda: mock_password_map["random"])
 
 # Diceware password test
 def test_render_diceware_password():
-    run_password_test("diceware", "diceware", lambda: mock_password_map["diceware"])
+    run_password_test("diceware", lambda: mock_password_map["diceware"])
 
 # UUID password test
 def test_render_uuid_password():
-    run_password_test("uuid", "uuid", lambda: mock_password_map["uuid"])
+    run_password_test("uuid", lambda: mock_password_map["uuid"])
     
 # Combined passwords test
 @patch("app.generator._generate_all_passwords", side_effect=mock_generate_passwords)
