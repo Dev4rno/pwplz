@@ -14,7 +14,7 @@ Start by [forking](https://docs.github.com/en/github/getting-started-with-github
 Clone your forked repository to your local machine:
 
 ```bash
-git clone https://github.com/your-username/pwplz.git
+git clone https://github.com/devArno88/pwplz.git
 ```
 
 ### 3. Create a Branch for Your Changes
@@ -22,7 +22,7 @@ git clone https://github.com/your-username/pwplz.git
 Create a new branch to keep your changes organized:
 
 ```bash
-git checkout -b feature/your-feature-name
+git checkout -b pwplz/your-feature-name
 ```
 
 ### 4. Make Changes
@@ -48,7 +48,7 @@ Write clear and concise commit messages (e.g. `Add password generation options f
 Push your changes to your forked repository:
 
 ```bash
-git push origin feature/your-feature-name
+git push origin pwplz/your-feature-name
 ```
 
 ### 8. Submit a Pull Request
