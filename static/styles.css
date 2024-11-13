@@ -223,3 +223,36 @@ h1 {
         width: 100%;
     }
 }
+
+.footer {
+    text-align: center;
+    padding: 1rem 0;
+    font-size: 0.9rem;
+    color: #666;
+    background-color: inherit;
+}
+
+.footer-link {
+    text-decoration: none;
+    color: #f1f1f1;
+    display: inline-flex;
+    align-items: center;
+    transition: transform 0.1s ease-in-out, color 0.1s ease-in-out;
+}
+
+.footer-link:hover {
+    transform: scale(1.03);
+    color: rgb(249, 174, 35);
+}
+
+.footer-logo {
+    width: 20px;
+    height: 20px;
+    margin-right: 0.4rem;
+    vertical-align: middle;
+    filter: opacity(0.8);
+}
+
+.footer-link:hover .footer-logo {
+    filter: invert(46%) sepia(89%) saturate(3057%) hue-rotate(17deg) brightness(94%) contrast(93%);
+}

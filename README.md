@@ -2,7 +2,7 @@
 
 ## Overview
 
-_Password Please_ (`pwplz`) is a simple web application that generates and manages passwords using [FastAPI](https://fastapi.tiangolo.com/tutorial/). With a user-friendly interface, users can generate, view, and copy passwords easily.
+**Password Please** (`pwplz`) is a simple web application that generates and manages passwords using [FastAPI](https://fastapi.tiangolo.com/tutorial/). With a user-friendly interface, users can generate, view, and copy passwords easily.
 
 ## Application Logic
 
@@ -10,9 +10,9 @@ _Password Please_ (`pwplz`) is a simple web application that generates and manag
 
 `pwplz` offers the following features:
 
-Password Generation: Automatically generates a set of passwords using defined rules.
-Simple Interface: A simple web interface that displays generated passwords along with options to copy them to the clipboard.
-Easy Regeneration: Users can regenerate passwords dynamically without refreshing the page.
+-   **Password Generation**: Automatically generates a set of passwords using defined rules.
+-   **Simple Interface**: A simple web interface that displays generated passwords along with options to copy them to the clipboard.
+-   **Easy Regeneration**: Users can regenerate passwords dynamically without refreshing the page.
 
 ## Application Structure
 
@@ -26,7 +26,7 @@ The application consists of the following key components:
 
 ### How It Works
 
--   **Startup**: When the application starts, it initializes the FastAPI app, mounts the static files directory, and creates an instance of the PasswordGenerator class.
+-   **Startup**: When the application starts, it initialises the FastAPI app, mounts the static files directory, and creates an instance of the PasswordGenerator class.
 
 -   **Password Generation**: Upon accessing the root endpoint (/), the application generates a set of passwords and renders them in the index.html template.
 
@@ -61,6 +61,24 @@ source venv/bin/activate # On Windows use `venv\Scripts\activate`
 ```bash
 pip install -r requirements.txt
 ```
+
+### Configuration
+
+The `PasswordGenerator` is a straightforward yet versatile class with various methods for generating different types of passwords. This class is initialised with keyword arguments that must include:
+
+-   `min_length`: the minimum password length required, where applicable
+-   `words`: a hyphen-joined list of words for Diceware passwords.
+
+These can (and should) be configured separately within a .env file, like so:
+
+```bash
+# .env
+
+MIN_LENGTH=50
+DICEWARE_WORDS=kiwi-apple-orange-banana-watermelon #etc
+```
+
+`pwplz` integrates analytics through [Apitally.io](https://apitally.io/), with the integration configured via the ApitallyMiddleware in FastAPI. The APITALLY_ID is securely stored in the .env file, allowing each developer to use their own account or remove the middleware entirely for customised setup.
 
 ### Run the Application
 

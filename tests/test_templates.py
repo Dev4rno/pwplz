@@ -1,8 +1,11 @@
 import re, pytest
 from unittest.mock import patch
 from fastapi.testclient import TestClient
-from app import app
 from html import escape
+from app import app
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Test client
 client = TestClient(app)
@@ -12,7 +15,7 @@ TITLE = "<title>password, please!</title>"
 STYLES = 'link href="http://testserver/static/styles.css" rel="stylesheet"'
 SCRIPT = 'script src="http://testserver/static/script.js"'
 REGEN_BUTTON = 'button id="regenerate-button"'
-
+FOOTER = ('class="footer-link"', 'class="footer-logo"', "DevArno")
 
 # Mock data
 mock_password_map = {
@@ -28,26 +31,45 @@ mock_password_map = {
 def mock_generate_passwords():
     return mock_password_map
 
-def mock_create_hash_password():
-    return mock_password_map["hash"]
+# Single password test helper
+def run_password_test(endpoint: str, password_type: str, mock_func):
+    with patch(f"app.generator._create_{password_type}_password", side_effect=mock_func):
+        response = client.get(f"/{endpoint}")
+        html_content = response.text
+        assert response.status_code == 200
+        assert TITLE in html_content
+        header = f'<h1>🔐 Your <span style="color: orange">{password_type}</span> password</h1>'
+        assert header in html_content
+        escaped_password = escape(mock_password_map[password_type])
+        password_regex = f'value="{re.escape(escaped_password)}"'
+        assert re.search(password_regex, html_content) is not None, f"No {password_type} password found"
+        assert all(x in html_content for x in FOOTER)
 
-def mock_create_argon2_password():
-    return mock_password_map["argon2"]
+# Hash password test
+def test_render_hash_password():
+    run_password_test("hash", "hash", lambda: mock_password_map["hash"])
 
-def mock_create_bcrypt_password():
-    return mock_password_map["bcrypt"]
+# Argon2 password test
+def test_render_argon2_password():
+    run_password_test("argon2", "argon2", lambda: mock_password_map["argon2"])
 
-def mock_create_uuid_password():
-    return mock_password_map["uuid"]
+# Bcrypt password test
+def test_render_bcrypt_password():
+    run_password_test("bcrypt", "bcrypt", lambda: mock_password_map["bcrypt"])
 
-def mock_create_diceware_password():
-    return mock_password_map["diceware"]
+# Random password test
+def test_render_random_password():
+    run_password_test("random", "random", lambda: mock_password_map["random"])
 
-def mock_create_random_password():
-    return mock_password_map["random"]
+# Diceware password test
+def test_render_diceware_password():
+    run_password_test("diceware", "diceware", lambda: mock_password_map["diceware"])
 
-
-# All passwords
+# UUID password test
+def test_render_uuid_password():
+    run_password_test("uuid", "uuid", lambda: mock_password_map["uuid"])
+    
+# Combined passwords test
 @patch("app.generator._generate_all_passwords", side_effect=mock_generate_passwords)
 def test_render_all_passwords(_):
 
@@ -76,87 +98,7 @@ def test_render_all_passwords(_):
     assert REGEN_BUTTON in html_content
     assert SCRIPT in html_content
     assert STYLES in html_content
+    assert all(x in html_content for x in FOOTER)
 
-def single_password_template_title(password_type: str):
-    return f'<h1>🔐 Your <span style="color: orange">{password_type}</span> password</h1>'
-
-# HASH
-@patch("app.generator._create_hash_password", side_effect=mock_create_hash_password)
-def test_render_hash_password(_):
-    response = client.get("/hash")
-    html_content = response.text
-    assert response.status_code == 200
-    assert TITLE in html_content
-    header = single_password_template_title("hash")
-    assert header in html_content
-    escaped_password = escape(mock_password_map["hash"])
-    password_regex = f'value="{re.escape(escaped_password)}"'
-    assert re.search(password_regex, html_content) is not None, f"No hash password found"
-
-# ARGON2
-@patch("app.generator._create_argon2_password", side_effect=mock_create_argon2_password)
-def test_render_argon2_password(_):
-    response = client.get("/argon2")
-    html_content = response.text
-    assert response.status_code == 200
-    assert TITLE in html_content
-    header = single_password_template_title("argon2")
-    assert header in html_content
-    escaped_password = escape(mock_password_map["argon2"])
-    password_regex = f'value="{re.escape(escaped_password)}"'
-    assert re.search(password_regex, html_content) is not None, f"No argon2 password found"
-
-# BCRYPT
-@patch("app.generator._create_bcrypt_password", side_effect=mock_create_bcrypt_password)
-def test_render_bcrypt_password(_):
-    response = client.get("/bcrypt")
-    html_content = response.text
-    assert response.status_code == 200
-    assert TITLE in html_content
-    header = single_password_template_title("bcrypt")
-    assert header in html_content
-    escaped_password = escape(mock_password_map["bcrypt"])
-    password_regex = f'value="{re.escape(escaped_password)}"'
-    assert re.search(password_regex, html_content) is not None, f"No bcrypt password found"
-
-# RANDOM
-@patch("app.generator._create_random_password", side_effect=mock_create_random_password)
-def test_render_random_password(_):
-    response = client.get("/random")
-    html_content = response.text
-    assert response.status_code == 200
-    assert TITLE in html_content
-    header = single_password_template_title("random")
-    assert header in html_content
-    escaped_password = escape(mock_password_map["random"])
-    password_regex = f'value="{re.escape(escaped_password)}"'
-    assert re.search(password_regex, html_content) is not None, f"No random password found"
-    
-# DICEWARE
-@patch("app.generator._create_diceware_password", side_effect=mock_create_diceware_password)
-def test_render_diceware_password(_):
-    response = client.get("/diceware")
-    html_content = response.text
-    assert response.status_code == 200
-    assert TITLE in html_content
-    header = single_password_template_title("diceware")
-    assert header in html_content
-    escaped_password = escape(mock_password_map["diceware"])
-    password_regex = f'value="{re.escape(escaped_password)}"'
-    assert re.search(password_regex, html_content) is not None, f"No diceware password found"
-    
-# UUID
-@patch("app.generator._create_uuid_password", side_effect=mock_create_uuid_password)
-def test_render_uuid_password(_):
-    response = client.get("/uuid")
-    html_content = response.text
-    assert response.status_code == 200
-    assert TITLE in html_content
-    header = single_password_template_title("uuid")
-    assert header in html_content
-    escaped_password = escape(mock_password_map["uuid"])
-    password_regex = f'value="{re.escape(escaped_password)}"'
-    assert re.search(password_regex, html_content) is not None, f"No uuid password found"
-    
 if __name__ == "__main__":
     pytest.main()

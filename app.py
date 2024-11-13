@@ -10,7 +10,6 @@ from apitally.fastapi import ApitallyMiddleware
 
 # Env
 load_dotenv()
-
 APITALLY_ID = os.getenv("APITALLY_ID")
 MIN_LENGTH = int(os.getenv("MIN_LENGTH"))
 DICEWARE_WORDS = os.getenv("DICEWARE_WORDS")
@@ -23,12 +22,14 @@ templates = Jinja2Templates(directory="templates")
 
 #-=-=-=-=-=-=-=-=-=-=-=-=>
 # Analytics via https://apitally.io/
+# configured with APITALLY_ID (.env)
 app.add_middleware(
 #-=-=-=-=-=-=-=-=-=-=-=-=>
     ApitallyMiddleware,
     client_id=APITALLY_ID,
     env="prod",
 )
+
 #-=-=-=-=-=-=-=-=-=-=-=-=>
 # Exception wrapper
 @app.exception_handler(HTTPException)
