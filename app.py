@@ -1,15 +1,16 @@
 import os
-from typing import Union
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request, HTTPException, status
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from generator import PasswordGenerator, PasswordType
-from apitally.fastapi import ApitallyMiddleware
+# from apitally.fastapi import ApitallyMiddleware
+from api_analytics.fastapi import Analytics
 
 # Env
 load_dotenv()
+API_ANALYTICS_KEY={os.getenv("API_ANALYTICS_KEY")}
 APITALLY_ID = os.getenv("APITALLY_ID")
 MIN_LENGTH = int(os.getenv("MIN_LENGTH"))
 DICEWARE_WORDS = os.getenv("DICEWARE_WORDS")
@@ -21,14 +22,16 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 #-=-=-=-=-=-=-=-=-=-=-=-=>
-# Analytics via https://apitally.io/
-# configured with APITALLY_ID (.env)
+# Analytics via https://pypi.org/project/fastapi-analytics/
+# configured with API_ANALYTICS_KEY (.env)
 app.add_middleware(
-#-=-=-=-=-=-=-=-=-=-=-=-=>
-    ApitallyMiddleware,
-    client_id=APITALLY_ID,
-    env="prod",
+    Analytics, 
+    api_key=API_ANALYTICS_KEY,
+    # ApitallyMiddleware,
+    # client_id=APITALLY_ID,
+    # env="prod",
 )
+
 
 #-=-=-=-=-=-=-=-=-=-=-=-=>
 # Exception wrapper
