@@ -5,4 +5,4 @@ argon2-cffi
 bcrypt
 pytest
 httpx
-apitally[fastapi]
+fastapi-analytics

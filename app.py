@@ -5,8 +5,8 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from generator import PasswordGenerator, PasswordType
-from apitally.fastapi import ApitallyMiddleware
-# from api_analytics.fastapi import Analytics
+# from apitally.fastapi import ApitallyMiddleware
+from api_analytics.fastapi import Analytics
 
 # Env
 load_dotenv()
@@ -24,14 +24,14 @@ templates = Jinja2Templates(directory="templates")
 #-=-=-=-=-=-=-=-=-=-=-=-=>
 # Analytics via https://pypi.org/project/fastapi-analytics/
 # configured with API_ANALYTICS_KEY (.env)
+#-=-=-=-=-=-=-=-=-=-=-=-=>
 app.add_middleware(
-    # Analytics, 
-    # api_key=API_ANALYTICS_KEY,
-    ApitallyMiddleware,
-    client_id=APITALLY_ID,
-    env="prod",
+    Analytics, 
+    api_key=API_ANALYTICS_KEY,
+    # ApitallyMiddleware,
+    # client_id=APITALLY_ID,
+    # env="prod",
 )
-
 
 #-=-=-=-=-=-=-=-=-=-=-=-=>
 # Exception wrapper

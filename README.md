@@ -49,14 +49,21 @@ cd pwplz
 
 ### Create a Virtual Environment
 
-_Optional but recommended_
+```bash
+python3 -m venv .venv
+source .venv/bin/activate # macOS
+venv\Scripts\activate # Windows
+```
+
+### Upgrade `pip`
 
 ```bash
-python -m venv venv
-source venv/bin/activate # On Windows use `venv\Scripts\activate`
+python3 -m pip install --upgrade pip
 ```
 
 ### Install Dependencies
+
+Once your virtual environment is activated:
 
 ```bash
 pip install -r requirements.txt
@@ -90,6 +97,12 @@ python3 main.py
 ### Access the Application
 
 Open a web browser (Chrome, Safari, Firefox etc.) and navigate to http://localhost:8000.
+
+### Deactivate virtual environment
+
+```bash
+deactivate
+```
 
 ## Hosting
 

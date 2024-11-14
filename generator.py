@@ -85,8 +85,16 @@ class PasswordGenerator:
         wordlist = self._get_random_words()
         if not wordlist:
             return ""
-        while len(password) < self.min_length:
-            password += secrets.choice(wordlist) + '-'
+        
+        # Add words until the password is at least min_length
+        while len(password) + 1 < self.min_length:  # +1 accounts for the separator
+            word = secrets.choice(wordlist)
+            password += word + '-'
+        
+        # Check if the password length is enough, add one more word if needed
+        if len(password) < self.min_length:
+            password += secrets.choice(wordlist)
+        
         return password.rstrip('-')
 
     #-=-=-=-=-=-=-=-=-=->
