@@ -2,7 +2,7 @@
 
 ## Overview
 
-**Password Please** (`pwplz`) is a simple web application that generates and manages passwords using [FastAPI](https://fastapi.tiangolo.com/tutorial/). With a user-friendly interface, users can generate, view, and copy passwords easily.
+**Password Please** (`pwplz`) is a simple web application that generates and manages passwords using [FastAPI](https://fastapi.tiangolo.com/tutorial/). With a user-friendly interface, users can generate, view, and copy passwords easily at [pwplz.com](https://pwplz.com/).
 
 ## Application Logic
 
