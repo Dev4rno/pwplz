@@ -5,13 +5,11 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from generator import PasswordGenerator, PasswordType
-# from apitally.fastapi import ApitallyMiddleware
 from api_analytics.fastapi import Analytics
 
 # Env
 load_dotenv()
-API_ANALYTICS_KEY={os.getenv("API_ANALYTICS_KEY")}
-APITALLY_ID = os.getenv("APITALLY_ID")
+API_ANALYTICS_KEY=os.getenv("API_ANALYTICS_KEY")
 MIN_LENGTH = int(os.getenv("MIN_LENGTH"))
 DICEWARE_WORDS = os.getenv("DICEWARE_WORDS")
 generator = PasswordGenerator(min_length=MIN_LENGTH, words=DICEWARE_WORDS)
@@ -25,13 +23,7 @@ templates = Jinja2Templates(directory="templates")
 # Analytics via https://pypi.org/project/fastapi-analytics/
 # configured with API_ANALYTICS_KEY (.env)
 #-=-=-=-=-=-=-=-=-=-=-=-=>
-app.add_middleware(
-    Analytics, 
-    api_key=API_ANALYTICS_KEY,
-    # ApitallyMiddleware,
-    # client_id=APITALLY_ID,
-    # env="prod",
-)
+app.add_middleware(Analytics, api_key=API_ANALYTICS_KEY)
 
 #-=-=-=-=-=-=-=-=-=-=-=-=>
 # Exception wrapper
@@ -70,7 +62,7 @@ async def render_all_passwords(request: Request):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Something went wrong, try again later",
         )
-        
+    
 #-=-=-=-=-=-=-=-=-=-=-=-=>
 # Method-specific route
 @app.get("/{slug}", response_class=HTMLResponse)

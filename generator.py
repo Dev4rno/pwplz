@@ -3,6 +3,7 @@ from enum import Enum
 import random
 from typing import Dict, List
 import string, secrets, itertools, uuid, hashlib, bcrypt
+import base64
 
 ########################>
 class PasswordType(Enum):
@@ -84,18 +85,15 @@ class PasswordGenerator:
         password = ""
         wordlist = self._get_random_words()
         if not wordlist:
-            return ""
-        
-        # Add words until the password is at least min_length
-        while len(password) + 1 < self.min_length:  # +1 accounts for the separator
+            return ""        
+        # Append words min_length is met
+        while len(password) < self.min_length:
             word = secrets.choice(wordlist)
-            password += word + '-'
+            if password:
+                password += '-'
+            password += word
         
-        # Check if the password length is enough, add one more word if needed
-        if len(password) < self.min_length:
-            password += secrets.choice(wordlist)
-        
-        return password.rstrip('-')
+        return password
 
     #-=-=-=-=-=-=-=-=-=->
 

@@ -1,8 +1,8 @@
-fastapi==0.115.0
+fastapi==0.115.5
 uvicorn[standard]==0.30.6
 jinja2
 argon2-cffi
 bcrypt
 pytest
 httpx
-fastapi-analytics
+api-analytics[fastapi]
