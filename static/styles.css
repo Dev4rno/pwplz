@@ -256,3 +256,22 @@ h1 {
 .footer-link:hover .footer-logo {
     filter: invert(46%) sepia(89%) saturate(3057%) hue-rotate(17deg) brightness(94%) contrast(93%);
 }
+
+.warning-block {
+    color: #d9534f; /* Red color for emphasis */
+    text-align: center;
+    margin-top: 24px;
+}
+
+.warning-title {
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 1rem;
+}
+
+.warning-subtitle {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    max-width: 500px;
+    color: salmon;
+}
