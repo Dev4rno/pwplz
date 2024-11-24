@@ -17,4 +17,4 @@ EXPOSE 8000
 ENV ENVIRONMENT=production
 
 # Use the $PORT variable dynamically
-CMD ["sh", "-c", "uvicorn app:app --host 0.0.0.0 --port ${PORT:-8000}"]
+CMD ["sh", "-c", "uvicorn core.app:app --host 0.0.0.0 --port ${PORT:-8000}"]
