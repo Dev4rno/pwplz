@@ -13,9 +13,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application code to the container
 COPY . /app
 
-# Ensure static files are included
-COPY ./static /app/static
-
 # Expose the default port
 EXPOSE 8000
 
