@@ -8,4 +8,4 @@ httpx
 api-analytics[fastapi]
 slowapi
 pytest-mock
-pytest-asyncio
+hypercorn
