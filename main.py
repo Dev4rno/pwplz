@@ -38,7 +38,7 @@ app.add_middleware(SlowAPIMiddleware)
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc):
     """Custom handler for HTTPException"""
-    blocks = str(exc).split(": ")
+    # blocks = str(exc).split(": ")
     return templates.TemplateResponse(
         request=request,
         status_code=status.HTTP_400_BAD_REQUEST,

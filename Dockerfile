@@ -12,4 +12,5 @@ COPY . .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Run the web service on container startup.
-CMD ["hypercorn", "main:app", "--bind", "::"]
+# CMD ["hypercorn", "main:app", "--bind", "::"]
+CMD ["sh", "-c", "uvicorn core.app:app --host 0.0.0.0 --port ${PORT:-8000}"]
