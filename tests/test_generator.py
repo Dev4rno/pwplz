@@ -1,9 +1,10 @@
-from dotenv import load_dotenv
 import os
-import pytest
-from unittest.mock import patch, mock_open
-from generator import PasswordGenerator, PasswordType
 import re
+from core.generator import PasswordGenerator, PasswordType
+from unittest.mock import patch, mock_open
+
+import pytest
+from dotenv import load_dotenv
 
 load_dotenv()
 

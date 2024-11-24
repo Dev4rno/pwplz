@@ -6,3 +6,6 @@ bcrypt
 pytest
 httpx
 api-analytics[fastapi]
+slowapi
+pytest-mock
+pytest-asyncio

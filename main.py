@@ -1,6 +1,6 @@
 import os
 import uvicorn
-from app import app 
+from core.app import app 
 
 HOST = "0.0.0.0"
 PORT = int(os.getenv("PORT", 8000))

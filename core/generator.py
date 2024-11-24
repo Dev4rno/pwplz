@@ -1,9 +1,12 @@
-from argon2 import PasswordHasher
 from enum import Enum
 import random
-from typing import Dict, List
-import string, secrets, itertools, uuid, hashlib, bcrypt
-import base64
+import string
+import secrets
+import itertools
+import uuid
+import hashlib
+import bcrypt
+from argon2 import PasswordHasher
 
 ########################>
 class PasswordType(Enum):
@@ -14,7 +17,9 @@ class PasswordType(Enum):
     UUID="uuid"
     HASH="hash"
     BCRYPT="bcrypt"
-
+    def random_type():
+        return random.choice(list(PasswordType)).value
+    
 ########################>
 class PasswordGenerator:
 ########################>
@@ -107,7 +112,7 @@ class PasswordGenerator:
 
     #-=-=-=-=-=-=-=-=-=->
 
-    def _generate_all_passwords(self) -> Dict[str, str]:
+    def _generate_all_passwords(self) -> dict:
         """Generates passwords for all types defined in PasswordType."""
         passwords = {}
         for password_type in PasswordType:
@@ -117,7 +122,7 @@ class PasswordGenerator:
     
     #-=-=-=-=-=-=-=-=-=->
 
-    def _get_random_words(self) -> List[str]:
+    def _get_random_words(self) -> list:
         """Retrieve individual words from the DICEWARE_WORDS env variable"""
         words = self.words.split('-')
         return [word.strip() for word in words if word.strip()]
