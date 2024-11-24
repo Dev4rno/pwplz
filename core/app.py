@@ -20,12 +20,6 @@ app = FastAPI()
 app.state.limiter = limiter 
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler) 
 
-# Static files
-# https://fastapi.tiangolo.com/tutorial/static-files/
-# app.mount("/static", StaticFiles(directory="static"), name="static")
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
-
 # Analytics
 # https://pypi.org/project/fastapi-analytics/
 app.add_middleware(Analytics, api_key=env_handler.analytics_key)
@@ -60,3 +54,9 @@ async def rate_limit_exception_handler(request: Request, _: RateLimitExceeded):
 
 # Include password endpoints
 app.include_router(router)
+
+# Static files
+# https://fastapi.tiangolo.com/tutorial/static-files/
+# app.mount("/static", StaticFiles(directory="static"), name="static")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
