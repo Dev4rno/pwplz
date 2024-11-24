@@ -1,3 +1,4 @@
+import os
 from .limiter import limiter
 from .router import router
 from .templates import templates
@@ -21,7 +22,9 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 # Static files
 # https://fastapi.tiangolo.com/tutorial/static-files/
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# app.mount("/static", StaticFiles(directory="static"), name="static")
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
 
 # Analytics
 # https://pypi.org/project/fastapi-analytics/
