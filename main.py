@@ -53,24 +53,27 @@ async def http_exception_handler(request: Request, exc):
     """Custom handler for HTTPException"""
     # blocks = str(exc).split(": ")
     return templates.TemplateResponse(
-        request=request,
-        status_code=status.HTTP_400_BAD_REQUEST,
-        name="exception.html",
-        context={
+        # request=request,
+        "exception.html",
+        # status_code=status.HTTP_400_BAD_REQUEST,
+        {
+            "request": request,
             "detail": exc,
-        }
+        },
+        status.HTTP_400_BAD_REQUEST,
     )
 
 @app.exception_handler(RateLimitExceeded)
 async def rate_limit_exception_handler(request: Request, _: RateLimitExceeded):
     """Custom handler for RateLimitExceeded"""
     return templates.TemplateResponse(
-        request=request,
-        status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-        name="exception.html",
-        context={
+        "exception.html",
+        # status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+        {
+            "request": request,
             "detail": get_random_rate_limit_warning(),
         },
+        status.HTTP_429_TOO_MANY_REQUESTS
     )
 
 # Include password endpoints
@@ -88,9 +91,9 @@ async def render_all_passwords(request: Request):
     """Default endpoint to render a simple HTML page with all generated passwords"""
     try:
         return templates.TemplateResponse(
-            request=request,
-            name="all_passwords.html",
-            context={
+            "all_passwords.html",
+            {
+                "request": request,
                 "passwords": generator._generate_all_passwords(),
                 "random_method": generator._get_random_password_type(),
             }
@@ -114,9 +117,9 @@ async def render_single_password(request: Request, slug: str):
         creator = generator._get_password_creation_method(password_type) 
         # Return the template with the generated password
         return templates.TemplateResponse(
-            request=request,
-            name="single_password.html",
-            context={
+            "single_password.html",
+            {
+                "request": request,
                 "slug": slug,
                 "password": creator(),
             },
