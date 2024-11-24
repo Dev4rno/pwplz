@@ -1,4 +1,4 @@
-fastapi==0.115.5
+fastapi==0.100.0
 uvicorn[standard]==0.30.6
 jinja2
 argon2-cffi
@@ -8,4 +8,3 @@ httpx
 api-analytics[fastapi]
 slowapi
 pytest-mock
-hypercorn

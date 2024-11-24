@@ -12,7 +12,6 @@
 #             APITALLY_ID: ${{ secrets.APITALLY_ID }}
 #             DICEWARE_WORDS: ${{ secrets.DICEWARE_WORDS }}
 #             MIN_LENGTH: ${{ secrets.MIN_LENGTH }}
-#             API_ANALYTICS_KEY: ${{ secrets.API_ANALYTICS_KEY }}
 #         steps:
 #             # Checkout the repository
 #             - uses: actions/checkout@v3
