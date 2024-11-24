@@ -23,7 +23,7 @@ def disable_limit():
         
 # Single password test helper
 def run_password_test(password_type: str, mock_func, test_client):
-    with patch(f"core.router.generator._create_{password_type}_password", side_effect=mock_func):
+    with patch(f"main.generator._create_{password_type}_password", side_effect=mock_func):
         response = test_client.get(f"/{password_type}")
         html_content = response.text
         assert response.status_code == 200
@@ -66,7 +66,7 @@ def test_render_uuid_password(disable_limit, test_client):
     run_password_test(pwt, lambda: mock_password_map[pwt], test_client)
 
 # Combined passwords test
-@patch("core.router.generator._generate_all_passwords", side_effect=lambda: mock_password_map)
+@patch("main.generator._generate_all_passwords", side_effect=lambda: mock_password_map)
 def test_render_all_passwords(_, disable_limit, test_client):
 
     # Hit default route and extract response
