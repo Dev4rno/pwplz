@@ -1,4 +1,3 @@
-import os
 from .limiter import limiter
 from .router import router
 from .templates import templates

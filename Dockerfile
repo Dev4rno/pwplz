@@ -1,20 +1,26 @@
 # Use the official Python image as a base image
-FROM python:3.10-slim
+FROM python:3.9-slim
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the local code to the container
-COPY . /app
+# Copy only the requirements file to install dependencies
+COPY requirements.txt /app/
 
-# Install dependencies from the requirements.txt file
+# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose a default port (optional, helps documentation)
+# Copy the rest of the application code to the container
+COPY . /app
+
+# Ensure static files are included
+COPY ./static /app/static
+
+# Expose the default port
 EXPOSE 8000
 
-# Set the environment variable for production mode (optional)
+# Set environment variables (optional)
 ENV ENVIRONMENT=production
 
-# Use the $PORT variable dynamically
+# Run the application with static file handling
 CMD ["sh", "-c", "uvicorn core.app:app --host 0.0.0.0 --port ${PORT:-8000}"]
