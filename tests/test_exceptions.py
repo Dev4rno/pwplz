@@ -9,8 +9,8 @@ from core.env import env_handler
 from core.strings import is_valid_warning
 
 # Env
-default_rate_limit = env_handler.default_rate_limit
-advanced_rate_limit = env_handler.advanced_rate_limit
+default_rate_limit = 5#env_handler.default_rate_limit
+advanced_rate_limit = 10#env_handler.advanced_rate_limit
 
 # Error label extractor
 def get_error_text(html_block: str):

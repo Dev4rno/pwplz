@@ -9,11 +9,20 @@ from fastapi import Request, status
 from fastapi.responses import HTMLResponse
 from api_analytics.fastapi import Analytics
 from fastapi.templating import Jinja2Templates
-from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi import Limiter#, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 
+
+async def rate_limit_exception_handler(request: Request, _: RateLimitExceeded):
+    """Custom handler for RateLimitExceeded"""
+    return templates.TemplateResponse(
+        name="exception.html",
+        status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+        context={"request": request, "detail": get_random_rate_limit_warning()},
+    )
+    
 limiter = Limiter(key_func=get_remote_address)
 
 # https://fastapi.tiangolo.com/advanced/templates/
@@ -24,8 +33,9 @@ app = FastAPI()
 
 # Rate limiter state
 # https://slowapi.readthedocs.io/en/latest/#fastapi
-app.state.limiter = limiter 
-app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler) 
+app.state.limiter = limiter
+
+app.add_exception_handler(RateLimitExceeded, rate_limit_exception_handler)#, _rate_limit_exceeded_handler)
 app.add_middleware(SlowAPIMiddleware)
 
 # Static files
@@ -42,24 +52,21 @@ app.add_middleware(Analytics, api_key=env_handler.analytics_key)
 async def http_exception_handler(request: Request, exc):
     return templates.TemplateResponse(
         name="exception.html",
-        context={
-            "request": request,
-            "detail": exc,
-        },
+        context={"request": request, "detail": exc},
         status_code=status.HTTP_400_BAD_REQUEST,
     )
 
-@app.exception_handler(RateLimitExceeded)
-async def rate_limit_exception_handler(request: Request, _: RateLimitExceeded):
-    """Custom handler for RateLimitExceeded"""
-    return templates.TemplateResponse(
-        name="exception.html",
-        context={
-            "request": request,
-            "detail": get_random_rate_limit_warning(),
-        },
-        status_code=status.HTTP_429_TOO_MANY_REQUESTS
-    )
+# @app.exception_handler(RateLimitExceeded)
+# async def rate_limit_exception_handler(request: Request, _: RateLimitExceeded):
+#     """Custom handler for RateLimitExceeded"""
+#     return templates.TemplateResponse(
+#         name="exception.html",
+#         context={
+#             "request": request,
+#             "detail": get_random_rate_limit_warning(),
+#         },
+#         status_code=status.HTTP_429_TOO_MANY_REQUESTS
+#     )
 
 # Start PasswordGenerator
 generator = PasswordGenerator(
@@ -69,7 +76,7 @@ generator = PasswordGenerator(
 
 # Default route
 @app.get("/", response_class=HTMLResponse)
-@limiter.limit(f"{env_handler.default_rate_limit}/minute")
+@limiter.limit("5/minute")
 async def render_all_passwords(request: Request):
     """Default endpoint to render a simple HTML page with all generated passwords"""
     try:
@@ -90,7 +97,7 @@ async def render_all_passwords(request: Request):
     
 # Method-specific route
 @app.get("/{slug}", response_class=HTMLResponse)
-@limiter.limit(f"{env_handler.advanced_rate_limit}/minute")
+@limiter.limit("10/minute")
 async def render_single_password(request: Request, slug: str):
     """Endpoint to render a simple HTML page with a single method-specific password"""
     try:
