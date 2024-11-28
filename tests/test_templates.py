@@ -3,8 +3,8 @@ import pytest
 from html import escape
 from core.generator import PasswordType
 from unittest.mock import patch
-from core.limiter import limiter
 from core.env import env_handler
+from main import limiter
 
 # Const
 TITLE = "<title>password, please!</title>"
