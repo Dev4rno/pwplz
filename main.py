@@ -9,7 +9,7 @@ from fastapi import FastAPI, Request, HTTPException, status
 from fastapi.staticfiles import StaticFiles
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
-from slowapi.middleware import SlowAPIMiddleware
+# from slowapi.middleware import SlowAPIMiddleware
 from api_analytics.fastapi import Analytics
 
 # import os
@@ -43,7 +43,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 # Analytics
 # https://pypi.org/project/fastapi-analytics/
 app.add_middleware(Analytics, api_key=env_handler.analytics_key)
-app.add_middleware(SlowAPIMiddleware)
+# app.add_middleware(SlowAPIMiddleware)
 
 # Exception handlers
 # https://fastapi.tiangolo.com/tutorial/handling-errors/#install-custom-exception-handlers
