@@ -1,3 +1,46 @@
+# name: Run pwplz tests via Pytest
+
+# on: [push]
+
+# jobs:
+#     build:
+#         runs-on: ubuntu-latest
+#         strategy:
+#             matrix:
+#                 python-version: ["3.13"]
+#         env:
+#             DEFAULT_RATE_LIMIT: ${{ secrets.DEFAULT_RATE_LIMIT }}
+#             ADVANCED_RATE_LIMIT: ${{ secrets.ADVANCED_RATE_LIMIT }}
+#             DICEWARE_WORDS: ${{ secrets.DICEWARE_WORDS }}
+#             MIN_LENGTH: ${{ secrets.MIN_LENGTH }}
+#             API_ANALYTICS_KEY: ${{ secrets.API_ANALYTICS_KEY }}
+#         steps:
+#             # Checkout the repository
+#             - uses: actions/checkout@v3
+
+#             # Set up Python environment
+#             - name: Set up Python ${{ matrix.python-version }}
+#               uses: actions/setup-python@v4
+#               with:
+#                   python-version: ${{ matrix.python-version }}
+
+#             # Create and activate the virtual environment
+#             - name: Set up virtual environment
+#               run: |
+#                   python -m venv .venv
+#                   source .venv/bin/activate  # For macOS/Linux
+
+#             # Install dependencies in the virtual environment
+#             - name: Install dependencies
+#               run: |
+#                   pip install --upgrade pip
+#                   if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+#             # Run tests with pytest in the virtual environment
+#             - name: Test with pytest
+#               run: |
+#                   ./.venv/bin/python -m pytest
+
 name: Run pwplz tests via Pytest
 
 on: [push]
@@ -7,7 +50,7 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                python-version: ["3.13"]
+                python-version: ["3.12"]
         env:
             DEFAULT_RATE_LIMIT: ${{ secrets.DEFAULT_RATE_LIMIT }}
             ADVANCED_RATE_LIMIT: ${{ secrets.ADVANCED_RATE_LIMIT }}
@@ -28,15 +71,18 @@ jobs:
             - name: Set up virtual environment
               run: |
                   python -m venv .venv
-                  source .venv/bin/activate  # For macOS/Linux
 
             # Install dependencies in the virtual environment
             - name: Install dependencies
               run: |
-                  pip install --upgrade pip
-                  if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+                  ./.venv/bin/python -m pip install --upgrade pip
+                  ./.venv/bin/python -m pip install pytest
+                  if [ -f requirements.txt ]; then ./.venv/bin/python -m pip install -r requirements.txt; fi
+
+            # Debug: List installed packages
+            - name: List installed packages
+              run: ./.venv/bin/python -m pip list
 
             # Run tests with pytest in the virtual environment
             - name: Test with pytest
-              run: |
-                  ./.venv/bin/python -m pytest
+              run: ./.venv/bin/python -m pytest
