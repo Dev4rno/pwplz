@@ -1,26 +1,48 @@
-<div class="warning-block">
-    <strong class="warning-title">WARNING</strong>
-    <div style="display: flex; align-items: center; justify-content: center">
-        <p class="warning-subtitle">
-            This
-            <a
-                href="https://github.com/devArno88/pwplz"
-                target="_blank"
-                rel="noopener noreferrer"
-                style="text-decoration: none; color: var(--primary-color-2)"
-            >
-                project</a
-            >
-            demonstrates
-            <a
-                href="https://fastapi.tiangolo.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                style="text-decoration: none; color: var(--primary-color-2)"
-                >FastAPI</a
-            >'s flexibility in creating and transmitting server-side data. Password generation should always be
-            performed client-side for optimal security. Use this tool at your own risk, and avoid generating passwords
-            for sensitive accounts or critical data.
-        </p>
+<div class="warning-popover-container">
+    <input type="checkbox" id="warning-toggle" class="warning-trigger-checkbox" />
+    <label for="warning-toggle" class="warning-popover-trigger" tabindex="0">
+        <svg
+            class="warning-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+        >
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+        </svg>
+        <span class="warning-label">Warning</span>
+    </label>
+    <div class="warning-popover-content">
+        <div class="warning-popover-arrow"></div>
+        <div class="warning-popover-header">
+            <strong>WARNING</strong>
+            <label for="warning-toggle" class="warning-popover-close" aria-label="Close">×</label>
+        </div>
+        <div class="warning-popover-body">
+            <p>
+                This
+                <a
+                    href="https://github.com/devArno88/pwplz"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="warning-link"
+                >
+                    project</a
+                >
+                demonstrates
+                <a href="https://fastapi.tiangolo.com/" target="_blank" rel="noopener noreferrer" class="warning-link"
+                    >FastAPI</a
+                >'s flexibility in creating and transmitting server-side data. Password generation should always be
+                performed client-side for optimal security. Use this tool at your own risk, and avoid generating
+                passwords for sensitive accounts or critical data.
+            </p>
+        </div>
     </div>
 </div>
