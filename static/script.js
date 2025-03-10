@@ -28,11 +28,13 @@ function showToast(method) {
 }
 
 // Regenerate button handler
-const regenerateButton = document.getElementById("regenerate-button");
-if (regenerateButton) {
-    regenerateButton.addEventListener("click", () => {
-        location.reload();
-    });
-} else {
-    console.error("Regenerate button not found");
-}
+document.addEventListener("DOMContentLoaded", () => {
+    const regenerateButton = document.getElementById("regenerate-button");
+    if (regenerateButton) {
+        regenerateButton.addEventListener("click", () => {
+            location.reload();
+        });
+    } else {
+        console.error("Regenerate button not found");
+    }
+});
