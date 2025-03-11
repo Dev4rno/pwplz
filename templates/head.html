@@ -1,7 +1,48 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>password, please!</title>
+
+    <!-- Basic Meta Tags -->
+    <title>Password, Please! - Free Secure Password Generator</title>
+    <meta
+        name="description"
+        content="Generate strong, secure passwords instantly with Password, Please! A free FastAPI-powered password generator designed for convenience and security."
+    />
+    <meta
+        name="keywords"
+        content="free passwords, strong passwords, password generator, secure passwords, free password tool, FastAPI password generator"
+    />
+    <meta name="author" content="Alessandro Arno" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content="Password, Please! - Free Secure Password Generator" />
+    <meta
+        property="og:description"
+        content="Generate strong, secure passwords instantly with Password, Please! A free FastAPI-powered password generator designed for convenience and security."
+    />
+    <meta property="og:image" content="{{ url_for('static', path='/og-image.png') }}" />
+    <meta property="og:url" content="https://pwplz.com" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Password, Please! - Free Secure Password Generator" />
+    <meta
+        name="twitter:description"
+        content="Generate strong, secure passwords instantly with Password, Please! A free FastAPI-powered password generator designed for convenience and security."
+    />
+    <meta name="twitter:image" content="{{ url_for('static', path='/og-image.png') }}" />
+    <meta name="twitter:site" content="@yourtwitterhandle" />
+    <!-- Replace with your handle -->
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', path='/favicon.png') }}" />
+
+    <!-- Canonical URL (Avoids Duplicate Content Issues) -->
+    <link rel="canonical" href="https://pwplz.com" />
+
     <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet" />
     <link rel="icon" href="{{ url_for('static', path='/favicon.png') }}" type="image/pmg" />
     <script src="{{ url_for('static', path='/script.js') }}"></script>

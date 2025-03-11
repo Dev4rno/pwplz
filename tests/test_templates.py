@@ -7,7 +7,7 @@ from core.env import env_handler
 from main import limiter
 
 # Const
-TITLE = "<title>password, please!</title>"
+TITLE = "<title>Password, Please! - Free Secure Password Generator</title>"
 STYLES = 'link href="http://testserver/static/styles.css" rel="stylesheet"'
 SCRIPT = 'script src="http://testserver/static/script.js"'
 REGEN_BUTTON = 'button id="regenerate-button"'
