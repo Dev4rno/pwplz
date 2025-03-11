@@ -2,6 +2,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- Analytics - Keep this script near the top for better tracking -->
     <script
         defer
         data-website-id="67cf1cc08d146a5c13e2b164"
@@ -20,8 +21,6 @@
         content="free passwords, strong passwords, password generator, secure passwords, free password tool, FastAPI password generator"
     />
     <meta name="author" content="Devarno" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta charset="UTF-8" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:title" content="Password, Please! - Free Secure Password Generator" />
@@ -42,15 +41,14 @@
     />
     <meta name="twitter:image" content="https://pwplz.com/static/og-image.png" />
     <meta name="twitter:site" content="@Dev4rno" />
-    <!-- Replace with your handle -->
 
-    <!-- Favicon -->
+    <!-- Favicon - Fixed the type attribute -->
     <link rel="icon" type="image/png" href="{{ url_for('static', path='/favicon.png') }}" />
 
-    <!-- Canonical URL (Avoids Duplicate Content Issues) -->
+    <!-- Canonical URL -->
     <link rel="canonical" href="https://pwplz.com" />
 
+    <!-- Stylesheets and Scripts -->
     <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet" />
-    <link rel="icon" href="{{ url_for('static', path='/favicon.png') }}" type="image/pmg" />
     <script src="{{ url_for('static', path='/script.js') }}"></script>
 </head>
