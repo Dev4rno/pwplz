@@ -1,23 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-    <!-- <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Error {{ status_code }}</title>
-        <link rel="icon" href="{{ url_for('static', path='/favicon.png') }}" type="image/pmg" />
-        <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet" />
-    </head> -->
-    {% include './head.html' %}
-    <body>
-        <div class="error-container">
-            <div class="status-code">Whoops</div>
-            <div class="error-message">Something went wrong</div>
-            <div class="error-detail">{{ detail }}</div>
-            <div style="margin-top: 2rem">
-                <a href="/" style="text-decoration: none">
-                    <h3 style="color: var(--primary-color-2); font-weight: 300">⬅️ Back to passwords</h3>
-                </a>
-            </div>
-        </div>
-    </body>
-</html>
+{% extends "base.html" %} {% block title %}Error {{ status_code }}{% endblock %} {% block content %}
+<div class="error-container">
+    <div class="status-code">Whoops</div>
+    <div class="error-message">Something went wrong</div>
+    <div class="error-detail">{{ detail }}</div>
+    <div style="margin-top: 2rem">
+        <a href="/" style="text-decoration: none">
+            <h3 style="color: var(--primary-color-2); font-weight: 300">⬅️ Back to passwords</h3>
+        </a>
+    </div>
+</div>
+{% endblock %} {% block regenerate_button %}{% endblock %}
