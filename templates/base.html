@@ -6,6 +6,6 @@
     <body>
         <div class="container">{% block content %}{% endblock %}</div>
 
-        <!-- Include scripts -->
+        <script src="{{ url_for('static', path='/script.js') }}"></script>
     </body>
 </html>
