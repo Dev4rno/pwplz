@@ -16,7 +16,9 @@ from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 from api_analytics.fastapi import Analytics
 import logging
-
+from collections import defaultdict
+import threading
+import time
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("plausible_proxy")
@@ -25,8 +27,20 @@ logger = logging.getLogger("plausible_proxy")
 PLAUSIBLE_SCRIPT_URL = "https://plausible.io/js/script.js"
 PLAUSIBLE_EVENT_URL = "https://plausible.io/api/event"
 
-# Choose any prefix you want - using something generic reduces chance of being blocked
-PROXY_PATH_PREFIX = "/stats"  # You can change this to whatever you prefer
+# Path for the proxy - ensure this matches in your HTML!
+PROXY_PATH = "/js"  # Using the path you're already requesting
+
+# Simple in-memory cache for the script
+script_cache = {
+    "content": None,
+    "timestamp": 0,
+    "lock": threading.Lock()
+}
+
+# Basic rate limiting (per IP)
+rate_limits = defaultdict(list)
+RATE_LIMIT_WINDOW = 60  # seconds
+RATE_LIMIT_MAX = 10     # requests per window
 
 async def rate_limit_exception_handler(request: Request, _: RateLimitExceeded):
     """Custom handler for RateLimitExceeded"""
@@ -122,26 +136,65 @@ async def render_single_password(request: Request, slug: str):
             detail=f"Invalid password type: {slug}",
         )
     
+def is_rate_limited(ip):
+    """Check if an IP is being rate limited"""
+    now = time.time()
+    # Remove requests older than the window
+    rate_limits[ip] = [t for t in rate_limits[ip] if now - t < RATE_LIMIT_WINDOW]
+    # Check if too many requests
+    if len(rate_limits[ip]) >= RATE_LIMIT_MAX:
+        return True
+    # Record this request
+    rate_limits[ip].append(now)
+    return False
+
+@app.get(f"{PROXY_PATH}/script.js")
+async def proxy_plausible_script(request: Request):
+    """
+    Proxy the Plausible script file with caching and rate limiting
+    """
+    # Get client IP for rate limiting
+    client_ip = request.client.host if request.client else "unknown"
     
-@app.get(f"{PROXY_PATH_PREFIX}/script.js")
-async def proxy_plausible_script():
-    """
-    Proxy the Plausible script file to avoid blockers
-    """
     try:
-        logger.info(f"Proxying Plausible script request to {PLAUSIBLE_SCRIPT_URL}")
-        async with httpx.AsyncClient(timeout=10.0) as client:
-            response = await client.get(PLAUSIBLE_SCRIPT_URL)
+        # Check rate limiting
+        if is_rate_limited(client_ip):
+            logger.warning(f"Rate limiting client {client_ip}")
+            return Response(
+                content="console.log('Too many requests, please try again later');",
+                status_code=429,
+                media_type="application/javascript"
+            )
             
-        # Forward the script with appropriate headers
-        return Response(
-            content=response.content,
-            status_code=response.status_code,
-            media_type="application/javascript",
-            headers={
-                "Cache-Control": "public, max-age=86400",  # Cache for 24 hours
-            }
-        )
+        # Check cache first (with thread safety)
+        with script_cache["lock"]:
+            now = time.time()
+            # If we have a recent cached version, return it
+            if script_cache["content"] and (now - script_cache["timestamp"] < 86400):  # 24 hour cache
+                logger.info("Serving Plausible script from cache")
+                return Response(
+                    content=script_cache["content"],
+                    media_type="application/javascript",
+                    headers={"Cache-Control": "public, max-age=86400"}
+                )
+            
+            # Otherwise, fetch a new copy
+            logger.info(f"Fetching fresh Plausible script from {PLAUSIBLE_SCRIPT_URL}")
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                response = await client.get(PLAUSIBLE_SCRIPT_URL)
+                
+                if response.status_code == 200:
+                    # Update cache
+                    script_cache["content"] = response.content
+                    script_cache["timestamp"] = now
+                    
+                # Return the response
+                return Response(
+                    content=response.content,
+                    status_code=response.status_code,
+                    media_type="application/javascript",
+                    headers={"Cache-Control": "public, max-age=86400"}
+                )
     except Exception as e:
         logger.error(f"Error proxying Plausible script: {e}")
         return Response(
@@ -150,32 +203,35 @@ async def proxy_plausible_script():
             status_code=500
         )
 
-@app.post(f"{PROXY_PATH_PREFIX}/event")
+@app.post(f"{PROXY_PATH}/event")
 async def proxy_plausible_event(request: Request):
     """
-    Proxy the Plausible API event endpoint to avoid blockers
+    Proxy the Plausible API event endpoint
     """
+    # Get client IP for rate limiting
+    client_ip = request.client.host if request.client else "unknown"
+    
     try:
+        # Check rate limiting
+        if is_rate_limited(client_ip):
+            logger.warning(f"Rate limiting client {client_ip}")
+            return Response(
+                content="Too many requests",
+                status_code=429,
+                media_type="application/json"
+            )
+            
         # Get request body
         body = await request.json()
         logger.info(f"Proxying Plausible event: {body.get('name', 'unknown')}")
         
-        # Forward headers that Plausible needs, but remove ones that might cause issues
+        # Forward necessary headers
         headers = {}
         for k, v in request.headers.items():
-            # Skip headers that would be set automatically or cause issues
             if k.lower() not in ("host", "content-length", "connection", "content-encoding"):
                 headers[k] = v
                 
-        # Forward User-Agent which is important for Plausible
-        if "user-agent" not in [h.lower() for h in headers]:
-            headers["User-Agent"] = request.headers.get("user-agent", "Unknown")
-            
-        # Keep the Referer header which Plausible uses
-        if "referer" in request.headers and "referer" not in [h.lower() for h in headers]:
-            headers["Referer"] = request.headers["referer"]
-        
-        # Make request to Plausible's actual endpoint
+        # Make request to Plausible
         async with httpx.AsyncClient(timeout=10.0) as client:
             response = await client.post(
                 PLAUSIBLE_EVENT_URL,
@@ -194,4 +250,4 @@ async def proxy_plausible_event(request: Request):
         return Response(
             content=f"Error: {str(e)}",
             status_code=500
-        )
+        )        

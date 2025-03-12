@@ -26,15 +26,3 @@ function showToast(method) {
         toast.classList.remove("show");
     }, 1500);
 }
-
-// Regenerate button handler
-// document.addEventListener("DOMContentLoaded", () => {
-//     const regenerateButton = document.getElementById("regenerate-button");
-//     if (regenerateButton) {
-//         regenerateButton.addEventListener("click", () => {
-//             location.reload();
-//         });
-//     } else {
-//         console.error("Regenerate button not found");
-//     }
-// });
