@@ -15,6 +15,18 @@ from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 from api_analytics.fastapi import Analytics
+import logging
+
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("plausible_proxy")
+
+# Constants for the proxy
+PLAUSIBLE_SCRIPT_URL = "https://plausible.io/js/script.js"
+PLAUSIBLE_EVENT_URL = "https://plausible.io/api/event"
+
+# Choose any prefix you want - using something generic reduces chance of being blocked
+PROXY_PATH_PREFIX = "/stats"  # You can change this to whatever you prefer
 
 async def rate_limit_exception_handler(request: Request, _: RateLimitExceeded):
     """Custom handler for RateLimitExceeded"""
@@ -111,34 +123,75 @@ async def render_single_password(request: Request, slug: str):
         )
     
     
-# Proxy routes for Plausible
-@app.get("/js/script.js")
+@app.get(f"{PROXY_PATH_PREFIX}/script.js")
 async def proxy_plausible_script():
-    """Proxy the Plausible script to avoid blockers"""
-    async with httpx.AsyncClient() as client:
-        response = await client.get("https://plausible.io/js/script.js")
-    return Response(
-        content=response.content,
-        media_type="application/javascript",
-        headers={"Cache-Control": "public, max-age=86400"}  # Cache for 24 hours
-    )
-
-@app.post("/api/event")
-async def proxy_plausible_event(request: Request):
-    """Proxy the Plausible API endpoint to avoid blockers"""
-    body = await request.json()
-    headers = {k: v for k, v in request.headers.items() 
-               if k.lower() not in ("host", "content-length")}
-    
-    async with httpx.AsyncClient() as client:
-        response = await client.post(
-            "https://plausible.io/api/event",
-            json=body,
-            headers=headers
+    """
+    Proxy the Plausible script file to avoid blockers
+    """
+    try:
+        logger.info(f"Proxying Plausible script request to {PLAUSIBLE_SCRIPT_URL}")
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.get(PLAUSIBLE_SCRIPT_URL)
+            
+        # Forward the script with appropriate headers
+        return Response(
+            content=response.content,
+            status_code=response.status_code,
+            media_type="application/javascript",
+            headers={
+                "Cache-Control": "public, max-age=86400",  # Cache for 24 hours
+            }
         )
-    
-    return Response(
-        content=response.content,
-        status_code=response.status_code,
-        headers=dict(response.headers)
-    )
+    except Exception as e:
+        logger.error(f"Error proxying Plausible script: {e}")
+        return Response(
+            content=f"console.error('Error loading analytics: {str(e)}');",
+            media_type="application/javascript",
+            status_code=500
+        )
+
+@app.post(f"{PROXY_PATH_PREFIX}/event")
+async def proxy_plausible_event(request: Request):
+    """
+    Proxy the Plausible API event endpoint to avoid blockers
+    """
+    try:
+        # Get request body
+        body = await request.json()
+        logger.info(f"Proxying Plausible event: {body.get('name', 'unknown')}")
+        
+        # Forward headers that Plausible needs, but remove ones that might cause issues
+        headers = {}
+        for k, v in request.headers.items():
+            # Skip headers that would be set automatically or cause issues
+            if k.lower() not in ("host", "content-length", "connection", "content-encoding"):
+                headers[k] = v
+                
+        # Forward User-Agent which is important for Plausible
+        if "user-agent" not in [h.lower() for h in headers]:
+            headers["User-Agent"] = request.headers.get("user-agent", "Unknown")
+            
+        # Keep the Referer header which Plausible uses
+        if "referer" in request.headers and "referer" not in [h.lower() for h in headers]:
+            headers["Referer"] = request.headers["referer"]
+        
+        # Make request to Plausible's actual endpoint
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.post(
+                PLAUSIBLE_EVENT_URL,
+                json=body,
+                headers=headers
+            )
+        
+        # Return Plausible's response
+        return Response(
+            content=response.content,
+            status_code=response.status_code,
+            media_type=response.headers.get("content-type", "application/json")
+        )
+    except Exception as e:
+        logger.error(f"Error proxying Plausible event: {e}")
+        return Response(
+            content=f"Error: {str(e)}",
+            status_code=500
+        )
