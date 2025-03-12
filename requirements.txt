@@ -8,3 +8,4 @@ httpx
 api-analytics[fastapi]
 slowapi
 pytest-mock
+httpx>=0.23.0

@@ -1,8 +1,11 @@
+
+import httpx
+
 from core.strings import get_random_rate_limit_warning
 from core.env import env_handler
 from core.generator import PasswordGenerator, PasswordType
 
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request, HTTPException, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi import Request, status
 from fastapi.responses import HTMLResponse
@@ -107,3 +110,35 @@ async def render_single_password(request: Request, slug: str):
             detail=f"Invalid password type: {slug}",
         )
     
+    
+# Proxy routes for Plausible
+@app.get("/js/script.js")
+async def proxy_plausible_script():
+    """Proxy the Plausible script to avoid blockers"""
+    async with httpx.AsyncClient() as client:
+        response = await client.get("https://plausible.io/js/script.js")
+    return Response(
+        content=response.content,
+        media_type="application/javascript",
+        headers={"Cache-Control": "public, max-age=86400"}  # Cache for 24 hours
+    )
+
+@app.post("/api/event")
+async def proxy_plausible_event(request: Request):
+    """Proxy the Plausible API endpoint to avoid blockers"""
+    body = await request.json()
+    headers = {k: v for k, v in request.headers.items() 
+               if k.lower() not in ("host", "content-length")}
+    
+    async with httpx.AsyncClient() as client:
+        response = await client.post(
+            "https://plausible.io/api/event",
+            json=body,
+            headers=headers
+        )
+    
+    return Response(
+        content=response.content,
+        status_code=response.status_code,
+        headers=dict(response.headers)
+    )
