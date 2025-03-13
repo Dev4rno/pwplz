@@ -15,13 +15,13 @@ from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 from api_analytics.fastapi import Analytics
-import logging
+# import logging
 from collections import defaultdict
 import threading
-import time
+# import time
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("plausible_proxy")
+# logging.basicConfig(level=logging.INFO)
+# logger = logging.getLogger("plausible_proxy")
 
 # Constants for the proxy
 PLAUSIBLE_EVENT_URL = "https://plausible.io/api/event"
@@ -92,13 +92,14 @@ async def send_plausible_pageview(request: Request, path: str):
                 headers=headers
             )
             
-        if response.status_code == 202:
-            logging.info(f"Plausible event sent successfully for {path}")
-        else:
-            logging.warning(f"Failed to send Plausible event: {response.status_code} - {response.text}")
+        if not response.status_code == 202:
+        #     logger.info(f"Plausible event sent successfully for {path}")
+        # else:
+            print(f"Failed to send Plausible event: {response.status_code} - {response.text}")
             
     except Exception as e:
-        logging.error(f"Error sending Plausible event: {str(e)}")
+        print(f"Error sending Plausible event: {str(e)}")
+        raise
 
 limiter = Limiter(key_func=get_remote_address)
 
